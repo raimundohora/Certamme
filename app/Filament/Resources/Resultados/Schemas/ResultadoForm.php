@@ -17,16 +17,6 @@ class ResultadoForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                TextInput::make('total')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                TextInput::make('acertos')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                Toggle::make('eliminado')
-                    ->required(),
                 TextInput::make('classificacao')
                     ->numeric(),
                 DateTimePicker::make('calculado_em'),

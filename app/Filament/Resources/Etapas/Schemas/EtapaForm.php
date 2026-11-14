@@ -17,8 +17,6 @@ class EtapaForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                Toggle::make('eliminatoria')
-                    ->required(),
                 Toggle::make('classificatoria')
                     ->required(),
                 TextInput::make('nota_minima')

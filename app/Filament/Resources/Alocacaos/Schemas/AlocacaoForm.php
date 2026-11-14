@@ -15,9 +15,6 @@ class AlocacaoForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                Select::make('sala_id')
-                    ->relationship('sala', 'id')
-                    ->required(),
                 TextInput::make('carteira')
                     ->required()
                     ->numeric(),

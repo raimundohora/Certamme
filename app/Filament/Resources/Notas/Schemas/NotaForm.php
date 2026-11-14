@@ -17,21 +17,6 @@ class NotaForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                TextInput::make('disciplina'),
-                TextInput::make('acertos')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                TextInput::make('nota_bruta')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                TextInput::make('nota_final')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                Toggle::make('eliminado')
-                    ->required(),
                 DateTimePicker::make('calculada_em'),
             ]);
     }

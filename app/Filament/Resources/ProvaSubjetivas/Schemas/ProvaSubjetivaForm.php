@@ -16,8 +16,6 @@ class ProvaSubjetivaForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                TextInput::make('codigo_controle')
-                    ->required(),
                 TextInput::make('nota_final')
                     ->numeric(),
                 Select::make('status')

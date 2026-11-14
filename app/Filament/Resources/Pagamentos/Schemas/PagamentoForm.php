@@ -19,10 +19,6 @@ class PagamentoForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                Select::make('status')
-                    ->options(StatusPagamento::class)
-                    ->default('pendente')
-                    ->required(),
                 TextInput::make('external_id'),
                 TextInput::make('secure_url')
                     ->url(),

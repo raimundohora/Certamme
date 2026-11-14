@@ -14,4 +14,5 @@ class Concurso extends Model
 
     public function cargos(): HasMany { return $this->hasMany(Cargo::class); }
     public function anexos(): HasMany { return $this->hasMany(Anexo::class); }
+    public function cronogramas(): HasMany { return $this->hasMany(Cronograma::class); }
 }

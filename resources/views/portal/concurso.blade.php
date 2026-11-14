@@ -5,6 +5,15 @@
 <h1 class="text-2xl font-bold mt-2 mb-1">{{ $concurso->nome }}</h1>
 <div class="text-slate-500 mb-6">Ano {{ $concurso->ano }} · {{ ucfirst($concurso->situacao) }}</div>
 
+@if($concurso->cronogramas->isNotEmpty())
+<h2 class="font-semibold mb-2">Cronograma</h2>
+<div class="bg-white rounded-lg shadow divide-y mb-6">
+  @foreach($concurso->cronogramas as $cr)
+    <div class="px-5 py-2 flex justify-between text-sm"><span>{{ $cr->evento }}</span><span class="text-slate-500">{{ $cr->data?->format('d/m/Y') ?? '-' }}</span></div>
+  @endforeach
+</div>
+@endif
+
 @if($concurso->anexos->isNotEmpty())
 <h2 class="font-semibold mb-2">Documentos</h2>
 <div class="bg-white rounded-lg shadow divide-y mb-6">
