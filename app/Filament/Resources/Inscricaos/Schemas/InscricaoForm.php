@@ -13,7 +13,8 @@ class InscricaoForm
         return $schema
             ->components([
                 Select::make('tenant_id')
-                    ->relationship('tenant', 'id')
+                    ->label('Organizadora')
+                    ->relationship('tenant', 'nome')
                     ->required(),
                 Select::make('concurso_id')
                     ->relationship('concurso', 'id')

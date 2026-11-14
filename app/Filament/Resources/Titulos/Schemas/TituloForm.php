@@ -14,7 +14,8 @@ class TituloForm
         return $schema
             ->components([
                 Select::make('tenant_id')
-                    ->relationship('tenant', 'id')
+                    ->label('Organizadora')
+                    ->relationship('tenant', 'nome')
                     ->required(),
                 Select::make('inscricao_id')
                     ->relationship('inscricao', 'id')

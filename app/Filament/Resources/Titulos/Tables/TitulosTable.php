@@ -14,7 +14,8 @@ class TitulosTable
     {
         return $table
             ->columns([
-                TextColumn::make('tenant.id')
+                TextColumn::make('tenant.nome')
+                    ->label('Organizadora')
                     ->searchable(),
                 TextColumn::make('inscricao.id')
                     ->searchable(),

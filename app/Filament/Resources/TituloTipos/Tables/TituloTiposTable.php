@@ -14,7 +14,8 @@ class TituloTiposTable
     {
         return $table
             ->columns([
-                TextColumn::make('tenant.id')
+                TextColumn::make('tenant.nome')
+                    ->label('Organizadora')
                     ->searchable(),
                 TextColumn::make('etapa.id')
                     ->searchable(),

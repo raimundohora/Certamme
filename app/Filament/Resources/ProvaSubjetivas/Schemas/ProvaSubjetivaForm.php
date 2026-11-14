@@ -14,7 +14,8 @@ class ProvaSubjetivaForm
         return $schema
             ->components([
                 Select::make('tenant_id')
-                    ->relationship('tenant', 'id')
+                    ->label('Organizadora')
+                    ->relationship('tenant', 'nome')
                     ->required(),
                 Select::make('etapa_id')
                     ->relationship('etapa', 'id')
