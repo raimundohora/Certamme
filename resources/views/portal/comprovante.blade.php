@@ -2,6 +2,9 @@
 @section('title','Comprovante')
 @section('content')
 <div class="max-w-xl mx-auto space-y-5">
+  @foreach($inscricao->convocacoes as $conv)
+    <div class="bg-emerald-600 text-white rounded-lg p-4 font-semibold">📣 Você foi CONVOCADO para a Etapa {{ $conv->etapa->ordem }}@if($conv->observacao) — {{ $conv->observacao }}@endif</div>
+  @endforeach
   <div class="bg-white rounded-lg shadow p-6">
     <h1 class="text-xl font-bold mb-4">Comprovante de inscrição</h1>
     <dl class="divide-y text-sm">

@@ -58,7 +58,7 @@ class InscricaoController extends Controller
     public function comprovante(Inscricao $inscricao)
     {
         abort_unless($inscricao->candidato_id === Auth::guard('candidato')->id(), 403);
-        $inscricao->load(["concurso", "cargo", "documentos", "isencao", "recursos"]);
+        $inscricao->load(["concurso", "cargo", "documentos", "isencao", "recursos", "convocacoes" => fn($q) => $q->where("publicado", true)->with("etapa")]);
         $pagamento = Pagamento::where('inscricao_id', $inscricao->id)->first();
         return view('portal.comprovante', compact('inscricao', 'pagamento'));
     }

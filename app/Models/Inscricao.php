@@ -29,4 +29,5 @@ class Inscricao extends Model
     public function documentos(): HasMany { return $this->hasMany(Documento::class); }
     public function isencao(): HasOne { return $this->hasOne(Isencao::class); }
     public function recursos(): HasMany { return $this->hasMany(Recurso::class); }
+    public function convocacoes(): HasMany { return $this->hasMany(Convocacao::class); }
 }
