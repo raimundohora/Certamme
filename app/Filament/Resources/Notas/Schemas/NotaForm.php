@@ -17,9 +17,6 @@ class NotaForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                Select::make('etapa_id')
-                    ->relationship('etapa', 'id')
-                    ->required(),
                 TextInput::make('disciplina'),
                 TextInput::make('acertos')
                     ->required()

@@ -19,14 +19,6 @@ class PagamentoForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                TextInput::make('valor')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                Select::make('metodo')
-                    ->options(MetodoPagamento::class)
-                    ->default('pix')
-                    ->required(),
                 Select::make('status')
                     ->options(StatusPagamento::class)
                     ->default('pendente')

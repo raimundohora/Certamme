@@ -16,17 +16,6 @@ class TituloForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                TextInput::make('titulo_tipo_id')
-                    ->required()
-                    ->numeric(),
-                TextInput::make('pontos')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                Select::make('status')
-                    ->options(StatusTitulo::class)
-                    ->default('pendente')
-                    ->required(),
                 TextInput::make('avaliador'),
                 TextInput::make('conferente'),
             ]);

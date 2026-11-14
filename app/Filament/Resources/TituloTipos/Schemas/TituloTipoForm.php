@@ -15,8 +15,6 @@ class TituloTipoForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                TextInput::make('nome')
-                    ->required(),
                 TextInput::make('pontuacao_maxima')
                     ->required()
                     ->numeric()

@@ -17,15 +17,6 @@ class EtapaForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                Select::make('cargo_id')
-                    ->relationship('cargo', 'id'),
-                TextInput::make('ordem')
-                    ->required()
-                    ->numeric()
-                    ->default(1),
-                Select::make('tipo')
-                    ->options(TipoEtapa::class)
-                    ->required(),
                 Toggle::make('eliminatoria')
                     ->required(),
                 Toggle::make('classificatoria')

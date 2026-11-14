@@ -72,6 +72,31 @@
     </form>
   </div>
 
+  {{-- Recursos --}}
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="font-semibold mb-3">Recursos</h2>
+    @foreach($inscricao->recursos as $rec)
+      <div class="border rounded p-3 mb-2 text-sm">
+        <div class="flex justify-between"><span class="font-medium">{{ $rec->tipo->label() }}@if($rec->questao) · questão {{ $rec->questao }}@endif</span>
+          <span class="px-2 py-0.5 rounded text-xs {{ $rec->status->value==='deferido' ? 'bg-emerald-100 text-emerald-700' : ($rec->status->value==='indeferido' ? 'bg-rose-100 text-rose-700' : 'bg-amber-100 text-amber-700') }}">{{ ucfirst($rec->status->value) }}</span></div>
+        <p class="text-slate-600 mt-1">{{ $rec->texto }}</p>
+        @if($rec->resposta)<p class="mt-1 text-slate-800"><b>Resposta da banca:</b> {{ $rec->resposta }}</p>@endif
+      </div>
+    @endforeach
+    <form method="POST" action="{{ route('portal.recurso.store',$inscricao) }}" class="space-y-2 mt-2">
+      @csrf
+      <select name="tipo" class="w-full border rounded px-3 py-2 text-sm" required>
+        <option value="gabarito">Gabarito</option>
+        <option value="nota">Nota</option>
+        <option value="isencao">Indeferimento de isenção</option>
+        <option value="outros">Outros</option>
+      </select>
+      <input name="questao" type="number" class="w-full border rounded px-3 py-2 text-sm" placeholder="Nº da questão (recurso de gabarito)">
+      <textarea name="texto" class="w-full border rounded px-3 py-2 text-sm" rows="3" placeholder="Fundamentação do recurso" required></textarea>
+      <button class="bg-slate-800 text-white px-4 py-2 rounded text-sm font-semibold">Interpor recurso</button>
+    </form>
+  </div>
+
   <a href="{{ route('portal.painel') }}" class="block text-center text-sm text-emerald-700 underline">Minha Área</a>
 </div>
 @endsection

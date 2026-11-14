@@ -28,4 +28,5 @@ class Inscricao extends Model
     public function cargo(): BelongsTo { return $this->belongsTo(Cargo::class); }
     public function documentos(): HasMany { return $this->hasMany(Documento::class); }
     public function isencao(): HasOne { return $this->hasOne(Isencao::class); }
+    public function recursos(): HasMany { return $this->hasMany(Recurso::class); }
 }

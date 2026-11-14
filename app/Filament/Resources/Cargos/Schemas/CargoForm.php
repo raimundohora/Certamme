@@ -15,8 +15,6 @@ class CargoForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                TextInput::make('nome')
-                    ->required(),
                 TextInput::make('vagas')
                     ->required()
                     ->numeric()

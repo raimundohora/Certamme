@@ -15,8 +15,6 @@ class ProvaForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                TextInput::make('nome')
-                    ->required(),
                 TextInput::make('caderno'),
                 TextInput::make('qtd_questoes')
                     ->required()

@@ -15,10 +15,6 @@ class InscricaoForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                Select::make('cargo_id')
-                    ->relationship('cargo', 'id'),
-                TextInput::make('numero_inscricao')
-                    ->required(),
                 TextInput::make('nome'),
             ]);
     }

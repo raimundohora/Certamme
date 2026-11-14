@@ -6,6 +6,7 @@ use App\Http\Controllers\Portal\HomeController;
 use App\Http\Controllers\Portal\DocumentoController;
 use App\Http\Controllers\Portal\InscricaoController;
 use App\Http\Controllers\Portal\IsencaoController;
+use App\Http\Controllers\Portal\RecursoController;
 use App\Http\Controllers\Portal\PainelController;
 use App\Http\Controllers\Portal\ResultadoController;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,7 @@ Route::middleware('portal.tenant')->group(function () {
         Route::get('/inscricao/{inscricao}/comprovante', [InscricaoController::class, 'comprovante'])->name('portal.comprovante');
         Route::post('/inscricao/{inscricao}/documentos', [DocumentoController::class, 'store'])->name('portal.documento.store');
         Route::post('/inscricao/{inscricao}/isencao', [IsencaoController::class, 'store'])->name('portal.isencao.store');
+        Route::post('/inscricao/{inscricao}/recurso', [RecursoController::class, 'store'])->name('portal.recurso.store');
     });
 
     Route::get('/concursos/{concurso}', [ConcursoController::class, 'show'])->name('portal.concurso');

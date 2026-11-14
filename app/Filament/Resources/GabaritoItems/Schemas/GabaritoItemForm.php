@@ -16,15 +16,6 @@ class GabaritoItemForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                TextInput::make('numero')
-                    ->required()
-                    ->numeric(),
-                TextInput::make('disciplina'),
-                TextInput::make('resposta_correta'),
-                Select::make('situacao')
-                    ->options(SituacaoQuestao::class)
-                    ->default('valida')
-                    ->required(),
                 TextInput::make('resposta_nova'),
                 TextInput::make('peso')
                     ->required()
