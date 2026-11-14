@@ -5,12 +5,14 @@ use App\Enums\MetodoPagamento;
 use App\Enums\Modalidade;
 use App\Enums\StatusInscricao;
 use App\Http\Controllers\Controller;
+use App\Mail\InscricaoRealizada;
 use App\Models\Concurso;
 use App\Models\Inscricao;
 use App\Models\Pagamento;
 use App\Services\PagamentoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class InscricaoController extends Controller
 {
@@ -52,13 +54,22 @@ class InscricaoController extends Controller
 
         app(PagamentoService::class)->criar($inscricao, 80.00, MetodoPagamento::PIX);
 
+        // e-mail de inscricao realizada (nao quebra o fluxo se falhar)
+        if ($candidato->email) {
+            try {
+                Mail::to($candidato->email)->send(new InscricaoRealizada($inscricao->load(['concurso', 'cargo'])));
+            } catch (\Throwable $e) {
+                report($e);
+            }
+        }
+
         return redirect()->route('portal.comprovante', $inscricao)->with('ok', 'Inscrição realizada! Finalize o pagamento.');
     }
 
     public function comprovante(Inscricao $inscricao)
     {
         abort_unless($inscricao->candidato_id === Auth::guard('candidato')->id(), 403);
-        $inscricao->load(["concurso", "cargo", "documentos", "isencao", "recursos", "convocacoes" => fn($q) => $q->where("publicado", true)->with("etapa")]);
+        $inscricao->load(['concurso', 'cargo', 'documentos', 'isencao', 'recursos', 'convocacoes' => fn ($q) => $q->where('publicado', true)->with('etapa')]);
         $pagamento = Pagamento::where('inscricao_id', $inscricao->id)->first();
         return view('portal.comprovante', compact('inscricao', 'pagamento'));
     }

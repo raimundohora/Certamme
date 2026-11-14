@@ -3,13 +3,14 @@ namespace App\Services;
 
 use App\Enums\MetodoPagamento;
 use App\Enums\StatusPagamento;
+use App\Mail\PagamentoConfirmado;
 use App\Models\Inscricao;
 use App\Models\Pagamento;
+use Illuminate\Support\Facades\Mail;
 use RuntimeException;
 
 class PagamentoService
 {
-    /** Cria o registro local da cobranca (pendente). 1 por inscricao. */
     public function criar(Inscricao $inscricao, float $valor, MetodoPagamento $metodo): Pagamento
     {
         return Pagamento::updateOrCreate(
@@ -18,7 +19,6 @@ class PagamentoService
         );
     }
 
-    /** Conciliacao por webhook/retorno: acha pela fatura do gateway e marca pago (idempotente). */
     public function confirmarPorExternalId(string $externalId): ?Pagamento
     {
         $pag = Pagamento::where('external_id', $externalId)->first();
@@ -27,16 +27,22 @@ class PagamentoService
         }
         if ($pag->status !== StatusPagamento::PAGO) {
             $pag->update(['status' => StatusPagamento::PAGO, 'pago_em' => now()]);
+
+            // e-mail de confirmacao
+            $pag->loadMissing('inscricao.candidato', 'inscricao.concurso');
+            $email = optional($pag->inscricao->candidato)->email;
+            if ($email) {
+                try {
+                    Mail::to($email)->send(new PagamentoConfirmado($pag));
+                } catch (\Throwable $e) {
+                    report($e);
+                }
+            }
         }
 
         return $pag->refresh();
     }
 
-    /**
-     * Cria a cobranca no gateway (Iugu) -> grava external_id/secure_url/pix.
-     * PENDENTE: precisa de IUGU_API_TOKEN. Contrato em docs/sigecon/integracoes-contratos.md
-     * (POST https://api.iugu.com/v1/invoices, payable_with = pix|bank_slip, external_reference = inscricao).
-     */
     public function criarNoGateway(Pagamento $pagamento): void
     {
         throw new RuntimeException('Integracao Iugu pendente: configurar IUGU_API_TOKEN e implementar POST /invoices.');
