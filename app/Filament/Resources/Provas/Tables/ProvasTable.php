@@ -14,18 +14,6 @@ class ProvasTable
     {
         return $table
             ->columns([
-                TextColumn::make('tenant.nome')
-                    ->label('Organizadora')
-                    ->searchable(),
-                TextColumn::make('etapa.id')
-                    ->searchable(),
-                TextColumn::make('nome')
-                    ->searchable(),
-                TextColumn::make('caderno')
-                    ->searchable(),
-                TextColumn::make('qtd_questoes')
-                    ->numeric()
-                    ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

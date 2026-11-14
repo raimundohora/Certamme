@@ -14,9 +14,8 @@ class CandidatoForm
         return $schema
             ->components([
                 Select::make('tenant_id')
-                    ->label('Organizadora')
                     ->relationship('tenant', 'nome')
-                    ->required(),
+                    ->hidden(),
                 TextInput::make('nome')
                     ->required(),
                 TextInput::make('cpf')

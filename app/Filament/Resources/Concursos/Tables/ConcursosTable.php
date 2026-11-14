@@ -14,14 +14,6 @@ class ConcursosTable
     {
         return $table
             ->columns([
-                TextColumn::make('tenant.nome')
-                    ->label('Organizadora')
-                    ->searchable(),
-                TextColumn::make('nome')
-                    ->searchable(),
-                TextColumn::make('ano')
-                    ->numeric()
-                    ->sortable(),
                 TextColumn::make('situacao')
                     ->searchable(),
                 TextColumn::make('created_at')

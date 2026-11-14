@@ -14,18 +14,6 @@ class ProvaSubjetivasTable
     {
         return $table
             ->columns([
-                TextColumn::make('tenant.nome')
-                    ->label('Organizadora')
-                    ->searchable(),
-                TextColumn::make('etapa.id')
-                    ->searchable(),
-                TextColumn::make('inscricao.id')
-                    ->searchable(),
-                TextColumn::make('codigo_controle')
-                    ->searchable(),
-                TextColumn::make('nota_final')
-                    ->numeric()
-                    ->sortable(),
                 TextColumn::make('status')
                     ->badge()
                     ->searchable(),

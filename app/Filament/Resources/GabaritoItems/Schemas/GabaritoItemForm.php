@@ -14,9 +14,8 @@ class GabaritoItemForm
         return $schema
             ->components([
                 Select::make('tenant_id')
-                    ->label('Organizadora')
                     ->relationship('tenant', 'nome')
-                    ->required(),
+                    ->hidden(),
                 Select::make('prova_id')
                     ->relationship('prova', 'id')
                     ->required(),

@@ -14,14 +14,6 @@ class TitulosTable
     {
         return $table
             ->columns([
-                TextColumn::make('tenant.nome')
-                    ->label('Organizadora')
-                    ->searchable(),
-                TextColumn::make('inscricao.id')
-                    ->searchable(),
-                TextColumn::make('titulo_tipo_id')
-                    ->numeric()
-                    ->sortable(),
                 TextColumn::make('pontos')
                     ->numeric()
                     ->sortable(),

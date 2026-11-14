@@ -15,18 +15,6 @@ class NotasTable
     {
         return $table
             ->columns([
-                TextColumn::make('tenant.nome')
-                    ->label('Organizadora')
-                    ->searchable(),
-                TextColumn::make('inscricao.id')
-                    ->searchable(),
-                TextColumn::make('etapa.id')
-                    ->searchable(),
-                TextColumn::make('disciplina')
-                    ->searchable(),
-                TextColumn::make('acertos')
-                    ->numeric()
-                    ->sortable(),
                 TextColumn::make('nota_bruta')
                     ->numeric()
                     ->sortable(),

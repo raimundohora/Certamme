@@ -14,14 +14,6 @@ class GabaritoItemsTable
     {
         return $table
             ->columns([
-                TextColumn::make('tenant.nome')
-                    ->label('Organizadora')
-                    ->searchable(),
-                TextColumn::make('prova.id')
-                    ->searchable(),
-                TextColumn::make('numero')
-                    ->numeric()
-                    ->sortable(),
                 TextColumn::make('disciplina')
                     ->searchable(),
                 TextColumn::make('resposta_correta')

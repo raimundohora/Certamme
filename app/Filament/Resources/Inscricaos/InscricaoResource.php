@@ -17,6 +17,8 @@ use Filament\Tables\Table;
 class InscricaoResource extends Resource
 {
     protected static ?string $model = Inscricao::class;
+    protected static ?string $modelLabel = 'Inscrição';
+    protected static ?string $pluralModelLabel = 'Inscrições';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

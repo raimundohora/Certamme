@@ -15,9 +15,8 @@ class EtapaForm
         return $schema
             ->components([
                 Select::make('tenant_id')
-                    ->label('Organizadora')
                     ->relationship('tenant', 'nome')
-                    ->required(),
+                    ->hidden(),
                 Select::make('concurso_id')
                     ->relationship('concurso', 'id')
                     ->required(),

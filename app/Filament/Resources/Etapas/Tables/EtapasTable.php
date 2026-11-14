@@ -15,16 +15,6 @@ class EtapasTable
     {
         return $table
             ->columns([
-                TextColumn::make('tenant.nome')
-                    ->label('Organizadora')
-                    ->searchable(),
-                TextColumn::make('concurso.id')
-                    ->searchable(),
-                TextColumn::make('cargo.id')
-                    ->searchable(),
-                TextColumn::make('ordem')
-                    ->numeric()
-                    ->sortable(),
                 TextColumn::make('tipo')
                     ->badge()
                     ->searchable(),

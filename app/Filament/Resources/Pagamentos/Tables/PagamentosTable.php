@@ -14,14 +14,6 @@ class PagamentosTable
     {
         return $table
             ->columns([
-                TextColumn::make('tenant.nome')
-                    ->label('Organizadora')
-                    ->searchable(),
-                TextColumn::make('inscricao.id')
-                    ->searchable(),
-                TextColumn::make('valor')
-                    ->numeric()
-                    ->sortable(),
                 TextColumn::make('metodo')
                     ->badge()
                     ->searchable(),

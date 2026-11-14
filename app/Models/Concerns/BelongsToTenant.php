@@ -11,8 +11,8 @@ trait BelongsToTenant
     public static function bootBelongsToTenant(): void
     {
         static::creating(function (Model $model) {
-            if (! $model->tenant_id && Tenant::current()) {
-                $model->tenant_id = Tenant::current()->getKey();
+            if (! $model->tenant_id) {
+                $model->tenant_id = Tenant::current()?->getKey() ?? Tenant::query()->value('id');
             }
         });
 

@@ -17,6 +17,8 @@ use Filament\Tables\Table;
 class GabaritoItemResource extends Resource
 {
     protected static ?string $model = GabaritoItem::class;
+    protected static ?string $modelLabel = 'Questão do Gabarito';
+    protected static ?string $pluralModelLabel = 'Gabarito';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

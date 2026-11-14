@@ -17,6 +17,8 @@ use Filament\Tables\Table;
 class ProvaSubjetivaResource extends Resource
 {
     protected static ?string $model = ProvaSubjetiva::class;
+    protected static ?string $modelLabel = 'Prova Subjetiva';
+    protected static ?string $pluralModelLabel = 'Provas Subjetivas';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

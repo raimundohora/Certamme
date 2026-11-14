@@ -15,16 +15,6 @@ class ResultadosTable
     {
         return $table
             ->columns([
-                TextColumn::make('tenant.nome')
-                    ->label('Organizadora')
-                    ->searchable(),
-                TextColumn::make('etapa.id')
-                    ->searchable(),
-                TextColumn::make('inscricao.id')
-                    ->searchable(),
-                TextColumn::make('total')
-                    ->numeric()
-                    ->sortable(),
                 TextColumn::make('acertos')
                     ->numeric()
                     ->sortable(),

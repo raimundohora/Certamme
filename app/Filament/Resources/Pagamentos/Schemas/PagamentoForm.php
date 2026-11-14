@@ -17,9 +17,8 @@ class PagamentoForm
         return $schema
             ->components([
                 Select::make('tenant_id')
-                    ->label('Organizadora')
                     ->relationship('tenant', 'nome')
-                    ->required(),
+                    ->hidden(),
                 Select::make('inscricao_id')
                     ->relationship('inscricao', 'id')
                     ->required(),

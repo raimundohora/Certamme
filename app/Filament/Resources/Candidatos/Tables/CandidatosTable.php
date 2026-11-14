@@ -14,19 +14,6 @@ class CandidatosTable
     {
         return $table
             ->columns([
-                TextColumn::make('tenant.nome')
-                    ->label('Organizadora')
-                    ->searchable(),
-                TextColumn::make('nome')
-                    ->searchable(),
-                TextColumn::make('cpf')
-                    ->searchable(),
-                TextColumn::make('email')
-                    ->label('Email address')
-                    ->searchable(),
-                TextColumn::make('data_nascimento')
-                    ->date()
-                    ->sortable(),
                 TextColumn::make('telefone')
                     ->searchable(),
                 TextColumn::make('created_at')

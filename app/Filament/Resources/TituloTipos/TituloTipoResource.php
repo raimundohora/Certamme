@@ -17,6 +17,8 @@ use Filament\Tables\Table;
 class TituloTipoResource extends Resource
 {
     protected static ?string $model = TituloTipo::class;
+    protected static ?string $modelLabel = 'Tipo de Título';
+    protected static ?string $pluralModelLabel = 'Tipos de Título';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

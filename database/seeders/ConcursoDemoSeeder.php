@@ -12,9 +12,12 @@ use App\Models\Etapa;
 use App\Models\GabaritoItem;
 use App\Models\Inscricao;
 use App\Models\LeituraCartao;
+use App\Models\LocalProva;
 use App\Models\Prova;
+use App\Models\Sala;
 use App\Models\Tenant;
 use App\Services\CalcularNotaService;
+use App\Services\EnsalamentoService;
 use App\Services\ClassificacaoService;
 use Illuminate\Database\Seeder;
 
@@ -80,6 +83,13 @@ class ConcursoDemoSeeder extends Seeder
             }
             LeituraCartao::create(['prova_id' => $prova->id, 'inscricao_id' => $insc->id, 'respostas' => $resp]);
         }
+
+        // Logistica: local + salas + ensalamento (mapa de sala)
+        $local = LocalProva::create(['concurso_id' => $concurso->id, 'nome' => 'Escola Municipal Central', 'endereco' => 'Rua Exemplo, 100', 'cidade' => 'Natal']);
+        foreach (['Sala 01', 'Sala 02', 'Sala 03'] as $sn) {
+            Sala::create(['local_prova_id' => $local->id, 'nome' => $sn, 'capacidade' => 8]);
+        }
+        app(EnsalamentoService::class)->alocar($etapa);
 
         app(CalcularNotaService::class)->calcular($prova);
         app(ClassificacaoService::class)->classificar($etapa);

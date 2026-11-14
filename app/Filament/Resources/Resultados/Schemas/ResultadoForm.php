@@ -15,9 +15,8 @@ class ResultadoForm
         return $schema
             ->components([
                 Select::make('tenant_id')
-                    ->label('Organizadora')
                     ->relationship('tenant', 'nome')
-                    ->required(),
+                    ->hidden(),
                 Select::make('etapa_id')
                     ->relationship('etapa', 'id')
                     ->required(),
