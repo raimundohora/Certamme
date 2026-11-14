@@ -3,9 +3,12 @@ namespace App\Models;
 
 use App\Enums\OrigemLeitura;
 use App\Models\Concerns\BelongsToTenant;
+use App\Observers\LeituraCartaoObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[ObservedBy(LeituraCartaoObserver::class)]
 class LeituraCartao extends Model
 {
     use BelongsToTenant;

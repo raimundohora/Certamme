@@ -16,12 +16,6 @@ class ProvaSubjetivaForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                TextInput::make('nota_final')
-                    ->numeric(),
-                Select::make('status')
-                    ->options(StatusSubjetiva::class)
-                    ->default('pendente')
-                    ->required(),
             ]);
     }
 }
