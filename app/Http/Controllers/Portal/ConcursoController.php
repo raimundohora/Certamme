@@ -8,7 +8,7 @@ class ConcursoController extends Controller
 {
     public function show(Concurso $concurso)
     {
-        $concurso->load("cargos");
+        $concurso->load(['cargos', 'anexos' => fn ($q) => $q->where('publicado', true)->latest()]);
         return view('portal.concurso', compact('concurso'));
     }
 }

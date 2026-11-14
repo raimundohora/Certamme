@@ -13,4 +13,5 @@ class Concurso extends Model
     protected $fillable = ['tenant_id', 'nome', 'ano', 'situacao'];
 
     public function cargos(): HasMany { return $this->hasMany(Cargo::class); }
+    public function anexos(): HasMany { return $this->hasMany(Anexo::class); }
 }
