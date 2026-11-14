@@ -16,9 +16,6 @@ class GabaritoItemForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                Select::make('prova_id')
-                    ->relationship('prova', 'id')
-                    ->required(),
                 TextInput::make('numero')
                     ->required()
                     ->numeric(),

@@ -16,9 +16,6 @@ class TituloForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                Select::make('inscricao_id')
-                    ->relationship('inscricao', 'id')
-                    ->required(),
                 TextInput::make('titulo_tipo_id')
                     ->required()
                     ->numeric(),

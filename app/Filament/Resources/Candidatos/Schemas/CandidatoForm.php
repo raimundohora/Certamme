@@ -16,8 +16,6 @@ class CandidatoForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                TextInput::make('nome')
-                    ->required(),
                 TextInput::make('cpf')
                     ->required(),
                 TextInput::make('email')

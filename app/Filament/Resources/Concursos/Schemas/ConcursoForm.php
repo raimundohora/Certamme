@@ -15,8 +15,6 @@ class ConcursoForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                TextInput::make('nome')
-                    ->required(),
                 TextInput::make('ano')
                     ->numeric(),
                 TextInput::make('situacao')

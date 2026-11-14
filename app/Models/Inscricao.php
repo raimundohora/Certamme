@@ -6,6 +6,8 @@ use App\Enums\StatusInscricao;
 use App\Models\Concerns\BelongsToTenant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Inscricao extends Model
 {
@@ -24,4 +26,6 @@ class Inscricao extends Model
     public function concurso(): BelongsTo { return $this->belongsTo(Concurso::class); }
     public function candidato(): BelongsTo { return $this->belongsTo(Candidato::class); }
     public function cargo(): BelongsTo { return $this->belongsTo(Cargo::class); }
+    public function documentos(): HasMany { return $this->hasMany(Documento::class); }
+    public function isencao(): HasOne { return $this->hasOne(Isencao::class); }
 }

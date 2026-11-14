@@ -15,9 +15,6 @@ class ProvaForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                Select::make('etapa_id')
-                    ->relationship('etapa', 'id')
-                    ->required(),
                 TextInput::make('nome')
                     ->required(),
                 TextInput::make('caderno'),

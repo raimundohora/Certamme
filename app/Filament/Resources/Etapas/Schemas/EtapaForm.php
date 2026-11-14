@@ -17,9 +17,6 @@ class EtapaForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                Select::make('concurso_id')
-                    ->relationship('concurso', 'id')
-                    ->required(),
                 Select::make('cargo_id')
                     ->relationship('cargo', 'id'),
                 TextInput::make('ordem')

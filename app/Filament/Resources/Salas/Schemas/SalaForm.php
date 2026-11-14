@@ -15,11 +15,6 @@ class SalaForm
                 Select::make('tenant_id')
                     ->relationship('tenant', 'nome')
                     ->hidden(),
-                TextInput::make('local_prova_id')
-                    ->required()
-                    ->numeric(),
-                TextInput::make('nome')
-                    ->required(),
                 TextInput::make('capacidade')
                     ->required()
                     ->numeric()
