@@ -28,6 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->plugin(\BezhanSalleh\FilamentShield\FilamentShieldPlugin::make())
             ->colors([
                 'primary' => Color::Amber,
             ])
