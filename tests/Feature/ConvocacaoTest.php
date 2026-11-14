@@ -29,9 +29,10 @@ class ConvocacaoTest extends TestCase
         $e = Etapa::create(['concurso_id' => $c->id, 'ordem' => 2, 'tipo' => TipoEtapa::REDACAO]);
         $cand = Candidato::create(['nome' => 'F', 'cpf' => '33333333333', 'email' => 'cv@x.com', 'password' => 'segredo1']);
         $insc = Inscricao::create(['concurso_id' => $c->id, 'candidato_id' => $cand->id, 'numero_inscricao' => '1', 'nome' => 'F', 'status' => 'confirmada']);
+        $e2 = Etapa::create(['concurso_id' => $c->id, 'ordem' => 3, 'tipo' => TipoEtapa::TITULOS]);
         Convocacao::create(['etapa_id' => $e->id, 'inscricao_id' => $insc->id, 'publicado' => true, 'observacao' => 'Prova discursiva']);
-        // nao publicada nao aparece
-        Convocacao::create(['etapa_id' => $e->id, 'inscricao_id' => $insc->id, 'publicado' => false]);
+        // nao publicada (outra etapa) nao aparece
+        Convocacao::create(['etapa_id' => $e2->id, 'inscricao_id' => $insc->id, 'publicado' => false]);
         Tenant::setCurrent(null);
 
         $this->actingAs($cand, 'candidato')->get("/inscricao/{$insc->id}/comprovante")
