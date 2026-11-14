@@ -4,10 +4,12 @@ namespace App\Models;
 use App\Models\Concerns\BelongsToTenant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Nota extends Model
+class Nota extends Model implements Auditable
 {
-    use BelongsToTenant;
+    use BelongsToTenant, AuditableTrait;
 
     protected $fillable = [
         'tenant_id', 'inscricao_id', 'etapa_id', 'disciplina',

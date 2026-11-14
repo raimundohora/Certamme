@@ -3,13 +3,18 @@ namespace App\Models;
 
 use App\Enums\SituacaoQuestao;
 use App\Models\Concerns\BelongsToTenant;
+use App\Observers\GabaritoItemObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use InvalidArgumentException;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class GabaritoItem extends Model
+#[ObservedBy(GabaritoItemObserver::class)]
+class GabaritoItem extends Model implements Auditable
 {
-    use BelongsToTenant;
+    use BelongsToTenant, AuditableTrait;
 
     protected $table = 'gabarito_itens';
     protected $fillable = [
@@ -33,12 +38,11 @@ class GabaritoItem extends Model
 
     public function prova(): BelongsTo { return $this->belongsTo(Prova::class); }
 
-    /** Resposta que vale no cálculo, considerando a situação da questão. */
     public function respostaEfetiva(): ?string
     {
         return match ($this->situacao) {
-            SituacaoQuestao::ANULADA  => null,                 // anulada = ponto p/ todos (tratado no cálculo)
-            SituacaoQuestao::ALTERADA => $this->resposta_nova, // alterada usa a nova
+            SituacaoQuestao::ANULADA  => null,
+            SituacaoQuestao::ALTERADA => $this->resposta_nova,
             default                   => $this->resposta_correta,
         };
     }
