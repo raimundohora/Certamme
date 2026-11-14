@@ -11,7 +11,8 @@ class CalcularNotaService
 {
     /**
      * Cruza as leituras da prova com o gabarito e grava uma Nota por (inscricao, etapa, disciplina).
-     * Regras: ANULADA = ponto p/ todos; ALTERADA = usa resposta_nova; nota_minima da etapa elimina (sobre o total).
+     * Regras: ANULADA = ponto p/ todos; ALTERADA = usa resposta_nova; nota_minima da etapa elimina.
+     * Notas com override=true (ajuste manual) sao PRESERVADAS (nao recalcula por cima).
      */
     public function calcular(Prova $prova): void
     {
@@ -29,7 +30,7 @@ class CalcularNotaService
                 $porDisciplina[$disc] ??= ['acertos' => 0, 'nota' => 0.0];
 
                 if ($item->situacao === SituacaoQuestao::ANULADA) {
-                    $acertou = true; // ponto p/ todos
+                    $acertou = true;
                 } else {
                     $marcada = strtoupper((string) ($leitura->respostas[(string) $numero] ?? ''));
                     $correta = strtoupper((string) $item->respostaEfetiva());
@@ -46,6 +47,13 @@ class CalcularNotaService
             $eliminado = $notaMinima !== null && $total < $notaMinima;
 
             foreach ($porDisciplina as $disc => $v) {
+                $existente = Nota::where('inscricao_id', $leitura->inscricao_id)
+                    ->where('etapa_id', $etapa->id)->where('disciplina', $disc)->first();
+
+                if ($existente && $existente->override) {
+                    continue; // ajuste manual trava o recalculo
+                }
+
                 Nota::updateOrCreate(
                     ['inscricao_id' => $leitura->inscricao_id, 'etapa_id' => $etapa->id, 'disciplina' => $disc],
                     [
