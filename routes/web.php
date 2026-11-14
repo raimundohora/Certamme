@@ -9,6 +9,7 @@ use App\Http\Controllers\Portal\IsencaoController;
 use App\Http\Controllers\Portal\RecursoController;
 use App\Http\Controllers\Portal\PainelController;
 use App\Http\Controllers\Portal\ResultadoController;
+use App\Http\Controllers\Admin\KitSalaController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('portal.tenant')->group(function () {
@@ -36,3 +37,6 @@ Route::middleware('portal.tenant')->group(function () {
 
     Route::get('/concursos/{concurso}', [ConcursoController::class, 'show'])->name('portal.concurso');
 });
+
+// Kit de sala (admin autenticado)
+Route::middleware(['web', 'auth'])->get('/kit/{etapa}/lista-presenca', [KitSalaController::class, 'listaPresenca'])->name('kit.presenca');
