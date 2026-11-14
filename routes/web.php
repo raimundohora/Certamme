@@ -10,6 +10,7 @@ use App\Http\Controllers\Portal\RecursoController;
 use App\Http\Controllers\Portal\PainelController;
 use App\Http\Controllers\Portal\ResultadoController;
 use App\Http\Controllers\Admin\KitSalaController;
+use App\Http\Controllers\Admin\RelatorioController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('portal.tenant')->group(function () {
@@ -40,3 +41,9 @@ Route::middleware('portal.tenant')->group(function () {
 
 // Kit de sala (admin autenticado)
 Route::middleware(['web', 'auth'])->get('/kit/{etapa}/lista-presenca', [KitSalaController::class, 'listaPresenca'])->name('kit.presenca');
+
+// Relatorios/exportacoes (admin autenticado)
+Route::middleware(['web', 'auth'])->group(function () {
+    Route::get('/relatorios/classificados/{etapa}', [RelatorioController::class, 'classificados'])->name('rel.classificados');
+    Route::get('/relatorios/arrecadacao/{concurso}', [RelatorioController::class, 'arrecadacao'])->name('rel.arrecadacao');
+});
