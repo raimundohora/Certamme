@@ -47,3 +47,6 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/relatorios/classificados/{etapa}', [RelatorioController::class, 'classificados'])->name('rel.classificados');
     Route::get('/relatorios/arrecadacao/{concurso}', [RelatorioController::class, 'arrecadacao'])->name('rel.arrecadacao');
 });
+
+// Webhook do gateway de pagamento (Asaas) - sem auth/tenant
+Route::post('/webhooks/asaas', \App\Http\Controllers\AsaasWebhookController::class)->name('webhooks.asaas');

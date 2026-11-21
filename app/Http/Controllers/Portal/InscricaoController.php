@@ -52,7 +52,12 @@ class InscricaoController extends Controller
             'status' => StatusInscricao::PENDENTE,
         ]);
 
-        app(PagamentoService::class)->criar($inscricao, 80.00, MetodoPagamento::PIX);
+        $pagamento = app(PagamentoService::class)->criar($inscricao, 80.00, MetodoPagamento::PIX);
+        try {
+            app(PagamentoService::class)->criarNoGateway($pagamento);
+        } catch (\Throwable $e) {
+            report($e);
+        }
 
         // e-mail de inscricao realizada (nao quebra o fluxo se falhar)
         if ($candidato->email) {
@@ -71,6 +76,14 @@ class InscricaoController extends Controller
         abort_unless($inscricao->candidato_id === Auth::guard('candidato')->id(), 403);
         $inscricao->load(['concurso', 'cargo', 'documentos', 'isencao', 'recursos', 'convocacoes' => fn ($q) => $q->where('publicado', true)->with('etapa')]);
         $pagamento = Pagamento::where('inscricao_id', $inscricao->id)->first();
+        if ($pagamento && ! $pagamento->external_id) {
+            try {
+                app(PagamentoService::class)->criarNoGateway($pagamento);
+                $pagamento->refresh();
+            } catch (\Throwable $e) {
+                report($e);
+            }
+        }
         return view('portal.comprovante', compact('inscricao', 'pagamento'));
     }
 }

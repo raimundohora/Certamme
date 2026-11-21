@@ -43,8 +43,37 @@ class PagamentoService
         return $pag->refresh();
     }
 
+    /**
+     * Cria a cobranca no gateway (Asaas) e grava os dados no pagamento.
+     * Idempotente: se ja tem external_id, nao faz nada.
+     */
     public function criarNoGateway(Pagamento $pagamento): void
     {
-        throw new RuntimeException('Integracao Iugu pendente: configurar IUGU_API_TOKEN e implementar POST /invoices.');
+        if ($pagamento->external_id) {
+            return;
+        }
+
+        $pagamento->loadMissing('inscricao.candidato');
+        $candidato = $pagamento->inscricao?->candidato;
+        if (! $candidato) {
+            throw new RuntimeException('Pagamento sem candidato para gerar cobranca.');
+        }
+
+        $gw = app(AsaasGateway::class);
+        $customerId = $gw->cliente($candidato);
+        $cob = $gw->cobranca($customerId, $pagamento);
+
+        $dados = [
+            'external_id' => $cob['id'] ?? null,
+            'secure_url' => $cob['invoiceUrl'] ?? null,
+            'linha_digitavel' => $cob['identificationField'] ?? null,
+        ];
+
+        if ($pagamento->metodo === MetodoPagamento::PIX && ! empty($cob['id'])) {
+            $qr = $gw->pixQrCode((string) $cob['id']);
+            $dados['pix_qrcode'] = $qr['payload'] ?? null;
+        }
+
+        $pagamento->update($dados);
     }
 }
