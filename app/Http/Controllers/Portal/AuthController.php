@@ -3,8 +3,10 @@ namespace App\Http\Controllers\Portal;
 
 use App\Http\Controllers\Controller;
 use App\Models\Candidato;
+use App\Models\Tenant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
@@ -23,13 +25,27 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+        $tenantId = Tenant::current()?->getKey();
+
         $data = $request->validate([
             'nome' => 'required|string|max:255',
             'cpf' => 'required|string|max:14',
-            'email' => 'required|email',
+            'email' => ['required', 'email', Rule::unique('candidatos', 'email')->where('tenant_id', $tenantId)],
             'password' => 'required|string|min:6|confirmed',
+        ], [
+            'email.unique' => 'Já existe uma conta com este e-mail. Faça login.',
+            'password.confirmed' => 'A confirmação de senha não confere.',
+            'password.min' => 'A senha deve ter ao menos 6 caracteres.',
         ]);
+
         $data['cpf'] = preg_replace('/\D/', '', $data['cpf']);
+
+        if (Candidato::where('tenant_id', $tenantId)->where('cpf', $data['cpf'])->exists()) {
+            return back()
+                ->withErrors(['cpf' => 'Já existe uma conta com este CPF. Faça login.'])
+                ->onlyInput('nome', 'cpf', 'email');
+        }
+
         $cand = Candidato::create($data);
         Auth::guard('candidato')->login($cand);
         return redirect()->route('portal.perfil')->with('ok', 'Conta criada! Complete seu cadastro.');

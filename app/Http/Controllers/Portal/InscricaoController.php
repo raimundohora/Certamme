@@ -6,6 +6,7 @@ use App\Enums\Modalidade;
 use App\Enums\StatusInscricao;
 use App\Http\Controllers\Controller;
 use App\Mail\InscricaoRealizada;
+use App\Models\Cargo;
 use App\Models\Concurso;
 use App\Models\Inscricao;
 use App\Models\Pagamento;
@@ -32,6 +33,7 @@ class InscricaoController extends Controller
             'cargo_id' => 'required|exists:cargos,id',
             'cidade_prova' => 'required|string|max:255',
             'modalidade' => 'required',
+            'metodo' => 'required|in:pix,boleto',
             'condicao_especial' => 'nullable|string|max:255',
         ]);
         $candidato = Auth::guard('candidato')->user();
@@ -41,6 +43,9 @@ class InscricaoController extends Controller
             return redirect()->route('portal.comprovante', $existe)->with('info', 'Você já está inscrito neste concurso.');
         }
 
+        $cargo = Cargo::findOrFail($data['cargo_id']);
+        $taxa = (float) ($cargo->taxa_inscricao ?? 0);
+
         $numero = str_pad((string) (Inscricao::where('concurso_id', $concurso->id)->count() + 1), 5, '0', STR_PAD_LEFT);
         $inscricao = Inscricao::create([
             'concurso_id' => $concurso->id,
@@ -49,14 +54,17 @@ class InscricaoController extends Controller
             'numero_inscricao' => $numero,
             'nome' => $candidato->nome,
             'modalidade' => Modalidade::from($data['modalidade']),
-            'status' => StatusInscricao::PENDENTE,
+            'status' => $taxa > 0 ? StatusInscricao::PENDENTE : StatusInscricao::CONFIRMADA,
         ]);
 
-        $pagamento = app(PagamentoService::class)->criar($inscricao, 80.00, MetodoPagamento::PIX);
-        try {
-            app(PagamentoService::class)->criarNoGateway($pagamento);
-        } catch (\Throwable $e) {
-            report($e);
+        // Inscrição com taxa: gera a cobrança no gateway. Gratuita: já fica confirmada.
+        if ($taxa > 0) {
+            $pagamento = app(PagamentoService::class)->criar($inscricao, $taxa, MetodoPagamento::from($data['metodo']));
+            try {
+                app(PagamentoService::class)->criarNoGateway($pagamento);
+            } catch (\Throwable $e) {
+                report($e);
+            }
         }
 
         // e-mail de inscricao realizada (nao quebra o fluxo se falhar)
@@ -68,7 +76,8 @@ class InscricaoController extends Controller
             }
         }
 
-        return redirect()->route('portal.comprovante', $inscricao)->with('ok', 'Inscrição realizada! Finalize o pagamento.');
+        $msg = $taxa > 0 ? 'Inscrição realizada! Finalize o pagamento.' : 'Inscrição gratuita confirmada!';
+        return redirect()->route('portal.comprovante', $inscricao)->with('ok', $msg);
     }
 
     public function comprovante(Inscricao $inscricao)

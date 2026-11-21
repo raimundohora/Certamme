@@ -9,8 +9,8 @@ class Cargo extends Model
 {
     use BelongsToTenant;
 
-    protected $fillable = ['tenant_id', 'concurso_id', 'nome', 'vagas'];
-    protected $casts = ['vagas' => 'integer'];
+    protected $fillable = ['tenant_id', 'concurso_id', 'nome', 'vagas', 'taxa_inscricao'];
+    protected $casts = ['vagas' => 'integer', 'taxa_inscricao' => 'decimal:2'];
 
     public function concurso(): BelongsTo { return $this->belongsTo(Concurso::class); }
 }

@@ -28,6 +28,12 @@ class CargoForm
                     ->numeric()
                     ->minValue(0)
                     ->default(0),
+                TextInput::make('taxa_inscricao')
+                    ->label('Taxa de inscrição (R$)')
+                    ->numeric()
+                    ->minValue(0)
+                    ->prefix('R$')
+                    ->helperText('Deixe em branco para inscrição gratuita (isenta de pagamento).'),
             ]);
     }
 }
