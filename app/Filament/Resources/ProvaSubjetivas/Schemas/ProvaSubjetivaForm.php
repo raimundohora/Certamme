@@ -12,8 +12,8 @@ class ProvaSubjetivaForm
     {
         return $schema
             ->components([
-                Select::make('etapa_id')->label('Etapa id')->relationship('etapa', 'ordem')->searchable()->required(),
-                Select::make('inscricao_id')->label('Inscricao id')->relationship('inscricao', 'nome')->searchable()->required(),
+                Select::make('etapa_id')->label('Etapa')->relationship('etapa', 'ordem')->searchable()->required(),
+                Select::make('inscricao_id')->label('Inscricao')->relationship('inscricao', 'nome')->searchable()->required(),
                 TextInput::make('codigo_controle')->label('Codigo controle')->maxLength(255),
                 TextInput::make('nota_final')->label('Nota final')->maxLength(255),
                 TextInput::make('status')->label('Status')->maxLength(255),

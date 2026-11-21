@@ -12,8 +12,8 @@ class EtapaForm
     {
         return $schema
             ->components([
-                Select::make('concurso_id')->label('Concurso id')->relationship('concurso', 'nome')->searchable()->required(),
-                Select::make('cargo_id')->label('Cargo id')->relationship('cargo', 'nome')->searchable()->required(),
+                Select::make('concurso_id')->label('Concurso')->relationship('concurso', 'nome')->searchable()->required(),
+                Select::make('cargo_id')->label('Cargo')->relationship('cargo', 'nome')->searchable()->required(),
                 TextInput::make('ordem')->label('Ordem')->numeric(),
                 TextInput::make('tipo')->label('Tipo')->maxLength(255),
                 TextInput::make('eliminatoria')->label('Eliminatoria')->maxLength(255),

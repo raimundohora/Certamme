@@ -11,7 +11,7 @@ class SalaForm
     {
         return $schema
             ->components([
-                TextInput::make('local_prova_id')->label('Local prova id')->numeric(),
+                TextInput::make('local_prova_id')->label('Local prova')->numeric(),
                 TextInput::make('nome')->label('Nome')->maxLength(255)->required(),
                 TextInput::make('capacidade')->label('Capacidade')->numeric(),
             ]);

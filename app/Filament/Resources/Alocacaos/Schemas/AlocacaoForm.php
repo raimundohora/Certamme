@@ -12,9 +12,9 @@ class AlocacaoForm
     {
         return $schema
             ->components([
-                Select::make('etapa_id')->label('Etapa id')->relationship('etapa', 'ordem')->searchable()->required(),
-                Select::make('inscricao_id')->label('Inscricao id')->relationship('inscricao', 'nome')->searchable()->required(),
-                Select::make('sala_id')->label('Sala id')->relationship('sala', 'nome')->searchable()->required(),
+                Select::make('etapa_id')->label('Etapa')->relationship('etapa', 'ordem')->searchable()->required(),
+                Select::make('inscricao_id')->label('Inscricao')->relationship('inscricao', 'nome')->searchable()->required(),
+                Select::make('sala_id')->label('Sala')->relationship('sala', 'nome')->searchable()->required(),
                 TextInput::make('carteira')->label('Carteira')->maxLength(255),
             ]);
     }

@@ -13,7 +13,7 @@ class AnexoForm
     {
         return $schema
             ->components([
-                Select::make('concurso_id')->label('Concurso id')->relationship('concurso', 'nome')->searchable()->required(),
+                Select::make('concurso_id')->label('Concurso')->relationship('concurso', 'nome')->searchable()->required(),
                 TextInput::make('titulo')->label('Titulo')->maxLength(255)->required(),
                 TextInput::make('grupo')->label('Grupo')->maxLength(255),
                 TextInput::make('arquivo')->label('Arquivo')->maxLength(255),

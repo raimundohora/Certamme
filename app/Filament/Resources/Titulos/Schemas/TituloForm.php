@@ -12,8 +12,8 @@ class TituloForm
     {
         return $schema
             ->components([
-                Select::make('inscricao_id')->label('Inscricao id')->relationship('inscricao', 'nome')->searchable()->required(),
-                TextInput::make('titulo_tipo_id')->label('Titulo tipo id')->numeric(),
+                Select::make('inscricao_id')->label('Inscricao')->relationship('inscricao', 'nome')->searchable()->required(),
+                TextInput::make('titulo_tipo_id')->label('Titulo tipo')->numeric(),
                 TextInput::make('pontos')->label('Pontos')->maxLength(255),
                 TextInput::make('status')->label('Status')->maxLength(255),
                 TextInput::make('avaliador')->label('Avaliador')->maxLength(255),

@@ -12,9 +12,9 @@ class LeituraCartaoForm
     {
         return $schema
             ->components([
-                Select::make('prova_id')->label('Prova id')->relationship('prova', 'nome')->searchable()->required(),
-                Select::make('inscricao_id')->label('Inscricao id')->relationship('inscricao', 'nome')->searchable()->required(),
-                TextInput::make('importacao_id')->label('Importacao id')->numeric(),
+                Select::make('prova_id')->label('Prova')->relationship('prova', 'nome')->searchable()->required(),
+                Select::make('inscricao_id')->label('Inscricao')->relationship('inscricao', 'nome')->searchable()->required(),
+                TextInput::make('importacao_id')->label('Importacao')->numeric(),
                 TextInput::make('respostas')->label('Respostas')->maxLength(255),
                 TextInput::make('origem')->label('Origem')->maxLength(255),
             ]);

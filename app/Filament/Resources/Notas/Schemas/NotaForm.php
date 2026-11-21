@@ -14,8 +14,8 @@ class NotaForm
     {
         return $schema
             ->components([
-                Select::make('inscricao_id')->label('Inscricao id')->relationship('inscricao', 'nome')->searchable()->required(),
-                Select::make('etapa_id')->label('Etapa id')->relationship('etapa', 'ordem')->searchable()->required(),
+                Select::make('inscricao_id')->label('Inscricao')->relationship('inscricao', 'nome')->searchable()->required(),
+                Select::make('etapa_id')->label('Etapa')->relationship('etapa', 'ordem')->searchable()->required(),
                 TextInput::make('disciplina')->label('Disciplina')->maxLength(255),
                 TextInput::make('acertos')->label('Acertos')->numeric(),
                 TextInput::make('nota_bruta')->label('Nota bruta')->maxLength(255),
