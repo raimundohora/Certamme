@@ -64,13 +64,29 @@ class ApuracaoService
             }
         }
 
-        // Nao-eliminados, com a modalidade/cargo da inscricao, ordenados por total desc (desempate por inscricao)
-        $ranking = Resultado::with('inscricao:id,modalidade,cargo_id')
+        // Nao-eliminados, ordenados por total desc e depois pelos criterios de desempate configurados.
+        $criterios = $etapa->config['desempate'] ?? ['maior_idade', 'mais_acertos', 'numero_inscricao'];
+        $ranking = Resultado::with([
+                'inscricao:id,numero_inscricao,modalidade,cargo_id,candidato_id',
+                'inscricao.candidato:id,data_nascimento',
+            ])
             ->where('etapa_id', $etapa->id)
             ->where('eliminado', false)
-            ->orderByDesc('total')
-            ->orderBy('inscricao_id')
-            ->get();
+            ->get()
+            ->sort(function (Resultado $a, Resultado $b) use ($criterios) {
+                $c = (float) $b->total <=> (float) $a->total; // nota desc (total e string por causa do cast decimal)
+                if ($c !== 0) {
+                    return $c;
+                }
+                foreach ($criterios as $criterio) {
+                    $c = $this->comparaDesempate($criterio, $a, $b);
+                    if ($c !== 0) {
+                        return $c;
+                    }
+                }
+                return $a->inscricao_id <=> $b->inscricao_id; // fallback deterministico
+            })
+            ->values();
 
         // Cargos envolvidos (para o corte por vagas)
         $cargoIds = $ranking->pluck('inscricao.cargo_id')->filter();
@@ -120,5 +136,38 @@ class ApuracaoService
             'aprovados'     => $aprovados,
             'por_cota'      => $posCota,
         ];
+    }
+
+    /**
+     * Compara dois resultados por um criterio de desempate. Retorna <0 se $a vem antes.
+     */
+    private function comparaDesempate(string $criterio, Resultado $a, Resultado $b): int
+    {
+        switch ($criterio) {
+            case 'maior_idade':
+                $da = $a->inscricao?->candidato?->data_nascimento;
+                $db = $b->inscricao?->candidato?->data_nascimento;
+                if ($da && $db) {
+                    return $da <=> $db; // mais velho (data menor) primeiro
+                }
+                if ($da) {
+                    return -1;
+                }
+                if ($db) {
+                    return 1;
+                }
+                return 0;
+
+            case 'mais_acertos':
+                return (int) $b->acertos <=> (int) $a->acertos; // mais acertos primeiro
+
+            case 'numero_inscricao':
+                $na = (int) ltrim((string) $a->inscricao?->numero_inscricao, '0');
+                $nb = (int) ltrim((string) $b->inscricao?->numero_inscricao, '0');
+                return $na <=> $nb; // menor numero primeiro
+
+            default:
+                return 0;
+        }
     }
 }
