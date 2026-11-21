@@ -5,6 +5,7 @@ use App\Enums\TipoEtapa;
 use App\Models\Concerns\BelongsToTenant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Etapa extends Model
 {
@@ -26,4 +27,6 @@ class Etapa extends Model
 
     public function concurso(): BelongsTo { return $this->belongsTo(Concurso::class); }
     public function cargo(): BelongsTo { return $this->belongsTo(Cargo::class); }
+    public function notas(): HasMany { return $this->hasMany(Nota::class); }
+    public function resultados(): HasMany { return $this->hasMany(Resultado::class); }
 }
