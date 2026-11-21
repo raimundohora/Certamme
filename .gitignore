@@ -28,3 +28,7 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# segredos: qualquer variante/backup de .env (nunca versionar)
+.env.*
+.env.bak*
