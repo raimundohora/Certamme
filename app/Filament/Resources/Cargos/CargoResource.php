@@ -14,8 +14,12 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
+use App\Filament\Concerns\ScopedToConcurso;
+
 class CargoResource extends Resource
 {
+    use ScopedToConcurso;
+
     protected static ?string $model = Cargo::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;

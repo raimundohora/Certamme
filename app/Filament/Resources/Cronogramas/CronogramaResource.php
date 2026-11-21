@@ -14,8 +14,12 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
+use App\Filament\Concerns\ScopedToConcurso;
+
 class CronogramaResource extends Resource
 {
+    use ScopedToConcurso;
+
     protected static ?string $model = Cronograma::class;
 
     protected static ?string $modelLabel = 'Evento do cronograma';

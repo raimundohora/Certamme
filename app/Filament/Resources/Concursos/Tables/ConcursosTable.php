@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Concursos\Tables;
 
+use App\Support\ConcursoAtual;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -35,10 +37,24 @@ class ConcursosTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
             ->recordActions([
+                Action::make('gerenciar')
+                    ->label('Gerenciar')
+                    ->icon('heroicon-o-arrow-right-circle')
+                    ->color('primary')
+                    ->action(function ($record) {
+                        ConcursoAtual::set($record->id);
+                        return redirect('/admin');
+                    }),
+                Action::make('sair')
+                    ->label('Sair')
+                    ->icon('heroicon-o-arrow-left-circle')
+                    ->color('gray')
+                    ->visible(fn ($record) => ConcursoAtual::id() === (int) $record->id)
+                    ->action(function () {
+                        ConcursoAtual::clear();
+                        return redirect('/admin');
+                    }),
                 EditAction::make(),
             ])
             ->toolbarActions([

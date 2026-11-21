@@ -14,8 +14,12 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
+use App\Filament\Concerns\ScopedToConcurso;
+
 class CampoInscricaoResource extends Resource
 {
+    use ScopedToConcurso;
+
     protected static ?string $model = CampoInscricao::class;
 
     protected static ?string $slug = 'campos-inscricao';
