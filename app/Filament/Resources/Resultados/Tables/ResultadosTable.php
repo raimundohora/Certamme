@@ -14,15 +14,22 @@ class ResultadosTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->defaultSort('classificacao')
             ->columns([
-                TextColumn::make('total')->label('Total')->searchable()->sortable(),
-                TextColumn::make('etapa.ordem')->label('Etapa')->searchable()->sortable(),
-                TextColumn::make('inscricao.nome')->label('Inscricao')->searchable()->sortable(),
+                TextColumn::make('classificacao')->label('Classif. geral')->sortable()
+                    ->placeholder('—')->alignCenter()->badge()->color('primary'),
+                TextColumn::make('classificacao_cota')->label('Classif. cota')->sortable()
+                    ->placeholder('—')->alignCenter()->toggleable(),
+                TextColumn::make('inscricao.numero_inscricao')->label('Nº insc.')->searchable()->toggleable(),
+                TextColumn::make('inscricao.nome')->label('Candidato')->searchable()->sortable(),
+                TextColumn::make('inscricao.modalidade')->label('Modalidade')->badge()
+                    ->formatStateUsing(fn ($state) => $state?->label() ?? $state)->toggleable(),
+                TextColumn::make('etapa.ordem')->label('Etapa')->sortable()->alignCenter(),
+                TextColumn::make('total')->label('Total')->numeric(2)->sortable(),
                 TextColumn::make('acertos')->label('Acertos')->sortable()->toggleable(),
-                IconColumn::make('eliminado')->label('Eliminado')->boolean(),
-                TextColumn::make('classificacao')->label('Classificacao')->sortable()->toggleable(),
-                TextColumn::make('calculado_em')->label('Calculado em')->sortable()->toggleable(),
-                TextColumn::make('created_at')->label('Criado em')->dateTime('d/m/Y H:i')->sortable()->toggleable(isToggledHiddenByDefault: true),
+                IconColumn::make('eliminado')->label('Eliminado')->boolean()
+                    ->trueColor('danger')->falseColor('success'),
+                TextColumn::make('calculado_em')->label('Apurado em')->dateTime('d/m/Y H:i')->sortable()->toggleable(),
             ])
             ->filters([])
             ->recordActions([

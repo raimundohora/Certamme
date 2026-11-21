@@ -8,8 +8,9 @@ use App\Models\Resultado;
 
 /**
  * Motor de apuracao de uma Etapa (Fase 2): soma as notas por inscricao (respeitando
- * override), aplica eliminacao (nota minima / nota eliminada), ranqueia os nao-eliminados
- * por total desc e grava o Resultado. Idempotente (updateOrCreate).
+ * override x peso), aplica eliminacao (nota minima / nota eliminada), ranqueia os
+ * nao-eliminados por total desc gravando a CLASSIFICACAO GERAL e a CLASSIFICACAO POR
+ * COTA (posicao dentro da modalidade da inscricao). Idempotente (updateOrCreate).
  */
 class ApuracaoService
 {
@@ -41,12 +42,13 @@ class ApuracaoService
             Resultado::updateOrCreate(
                 ['etapa_id' => $etapa->id, 'inscricao_id' => $inscricaoId],
                 [
-                    'tenant_id'    => $etapa->tenant_id,
-                    'total'        => $total,
-                    'acertos'      => $acertos,
-                    'eliminado'    => $eliminado,
-                    'classificacao' => null,
-                    'calculado_em' => now(),
+                    'tenant_id'          => $etapa->tenant_id,
+                    'total'              => $total,
+                    'acertos'            => $acertos,
+                    'eliminado'          => $eliminado,
+                    'classificacao'      => null,
+                    'classificacao_cota' => null,
+                    'calculado_em'       => now(),
                 ],
             );
             $apurados++;
@@ -55,20 +57,32 @@ class ApuracaoService
             }
         }
 
-        // Classificacao geral: nao-eliminados ordenados por total desc (desempate por inscricao)
-        $ranking = Resultado::where('etapa_id', $etapa->id)
+        // Nao-eliminados, com a modalidade da inscricao, ordenados por total desc (desempate por inscricao)
+        $ranking = Resultado::with('inscricao:id,modalidade')
+            ->where('etapa_id', $etapa->id)
             ->where('eliminado', false)
             ->orderByDesc('total')
             ->orderBy('inscricao_id')
             ->get();
 
-        $pos = 0;
+        $posGeral = 0;
+        $posCota = [];
         foreach ($ranking as $r) {
-            $pos++;
-            $r->classificacao = $pos;
+            $posGeral++;
+            $r->classificacao = $posGeral;
+
+            $mod = $r->inscricao?->modalidade?->value ?? 'ampla';
+            $posCota[$mod] = ($posCota[$mod] ?? 0) + 1;
+            $r->classificacao_cota = $posCota[$mod];
+
             $r->save();
         }
 
-        return ['apurados' => $apurados, 'eliminados' => $eliminados, 'classificados' => $pos];
+        return [
+            'apurados'      => $apurados,
+            'eliminados'    => $eliminados,
+            'classificados' => $posGeral,
+            'por_cota'      => $posCota,
+        ];
     }
 }
