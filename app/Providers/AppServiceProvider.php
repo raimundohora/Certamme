@@ -2,23 +2,22 @@
 
 namespace App\Providers;
 
+use App\Models\Isencao;
+use App\Models\Recurso;
+use App\Observers\IsencaoObserver;
+use App\Observers\RecursoObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
-        //
+        Isencao::observe(IsencaoObserver::class);
+        Recurso::observe(RecursoObserver::class);
     }
 }
