@@ -7,6 +7,8 @@ use App\Services\ApuracaoService;
 use App\Services\ConvocacaoService;
 use App\Services\EnsalamentoService;
 use App\Services\ImportarNotasService;
+use App\Services\KitSalaService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -179,6 +181,25 @@ class EtapasTable
                             ->body("Convocados: {$r['convocados']} (critério: {$r['criterio']}). Publique na tela de Convocações.")
                             ->color($r['convocados'] > 0 ? 'success' : 'warning')
                             ->send();
+                    }),
+                Action::make('lista_presenca')
+                    ->label('Lista de presença (PDF)')
+                    ->icon('heroicon-o-document-text')
+                    ->color('gray')
+                    ->action(function (Etapa $record) {
+                        $dados = app(KitSalaService::class)->dadosListaPresenca($record);
+                        if (count($dados['salas']) === 0) {
+                            Notification::make()
+                                ->title('Sem ensalamento')
+                                ->body('Rode o ensalamento antes de gerar a lista de presença.')
+                                ->warning()->send();
+                            return null;
+                        }
+                        $pdf = Pdf::loadView('pdf.lista-presenca', $dados)->setPaper('a4');
+                        return response()->streamDownload(
+                            fn () => print($pdf->output()),
+                            'lista-presenca-etapa-' . $record->ordem . '.pdf',
+                        );
                     }),
                 EditAction::make(),
             ])

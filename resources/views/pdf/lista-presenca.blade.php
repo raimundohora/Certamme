@@ -1,37 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<style>
-  body { font-family: DejaVu Sans, sans-serif; font-size: 11px; color: #111; }
-  h1 { font-size: 15px; margin: 0 0 2px; }
-  .sub { color: #555; margin-bottom: 14px; }
-  h2 { font-size: 13px; margin: 18px 0 4px; }
-  table { width: 100%; border-collapse: collapse; }
-  th, td { border: 1px solid #333; padding: 5px; text-align: left; }
-  th { background: #eee; }
-</style>
+    <meta charset="utf-8">
+    <style>
+        * { font-family: DejaVu Sans, sans-serif; }
+        body { font-size: 11px; color: #111; margin: 0; }
+        .sala { page-break-after: always; padding: 10px 6px; }
+        .sala:last-child { page-break-after: auto; }
+        h1 { font-size: 15px; margin: 0 0 2px; }
+        .sub { font-size: 11px; color: #333; margin: 0 0 8px; }
+        .meta { font-size: 11px; margin: 0 0 10px; }
+        .meta b { font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #999; padding: 5px 6px; text-align: left; vertical-align: middle; }
+        th { background: #eee; font-size: 10px; text-transform: uppercase; }
+        td.c { text-align: center; width: 48px; }
+        td.n { width: 70px; text-align: center; }
+        td.sig { width: 180px; }
+        .foot { margin-top: 14px; font-size: 10px; color: #555; }
+    </style>
 </head>
 <body>
-  <h1>Lista de Presença</h1>
-  <div class="sub">{{ $etapa->concurso->nome ?? '' }} — Etapa {{ $etapa->ordem }}</div>
-
-  @foreach($grupos as $salaId => $alocacoes)
-    @php $sala = $alocacoes->first()->sala; @endphp
-    <h2>{{ $sala->local->nome ?? '' }} — {{ $sala->nome }}</h2>
-    <table>
-      <thead><tr><th style="width:60px">Carteira</th><th style="width:90px">Inscrição</th><th>Nome</th><th style="width:180px">Assinatura</th></tr></thead>
-      <tbody>
-        @foreach($alocacoes->sortBy('carteira') as $a)
-          <tr>
-            <td>{{ $a->carteira }}</td>
-            <td>{{ $a->inscricao->numero_inscricao }}</td>
-            <td>{{ $a->inscricao->nome }}</td>
-            <td></td>
-          </tr>
-        @endforeach
-      </tbody>
-    </table>
-  @endforeach
+@foreach ($salas as $bloco)
+    <div class="sala">
+        <h1>Lista de Presença</h1>
+        <p class="sub">{{ $concurso }}{{ $cargo ? ' — '.$cargo : '' }} · Etapa {{ $etapaOrdem }}</p>
+        <p class="meta">
+            <b>Local:</b> {{ $bloco['local'] }}
+            &nbsp;·&nbsp; <b>Sala:</b> {{ $bloco['sala'] }}
+            &nbsp;·&nbsp; <b>Candidatos:</b> {{ count($bloco['linhas']) }}
+            &nbsp;·&nbsp; <b>Data:</b> ____/____/______
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th class="c">Cart.</th>
+                    <th>Nº inscrição</th>
+                    <th>Candidato</th>
+                    <th>Assinatura</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($bloco['linhas'] as $l)
+                    <tr>
+                        <td class="c">{{ $l['carteira'] }}</td>
+                        <td class="n">{{ $l['numero'] }}</td>
+                        <td>{{ $l['nome'] }}</td>
+                        <td class="sig"></td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <p class="foot">Gerado por Certamme em {{ $geradoEm }}. Aplicador: _____________________________  Assinatura: _____________________</p>
+    </div>
+@endforeach
+@if(count($salas) === 0)
+    <p style="padding:20px">Nenhum candidato alocado nesta etapa. Rode o ensalamento antes de gerar a lista.</p>
+@endif
 </body>
 </html>
