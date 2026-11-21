@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Etapas\Tables;
 
 use App\Models\Etapa;
 use App\Services\ApuracaoService;
+use App\Services\ConvocacaoService;
 use App\Services\EnsalamentoService;
 use App\Services\ImportarNotasService;
 use Filament\Actions\Action;
@@ -150,6 +151,33 @@ class EtapasTable
                             ->body($corpo)
                             ->color($semVaga ? 'warning' : ($r['alocados'] > 0 ? 'success' : 'danger'))
                             ->persistent()
+                            ->send();
+                    }),
+                Action::make('convocar')
+                    ->label('Convocar')
+                    ->icon('heroicon-o-megaphone')
+                    ->color('warning')
+                    ->modalHeading('Convocar candidatos')
+                    ->modalSubmitActionLabel('Convocar')
+                    ->modalDescription('Gera convocações a partir do resultado desta etapa. Nascem não publicadas (publique depois na tela de Convocações). Refaz as convocações da etapa.')
+                    ->schema([
+                        Select::make('criterio')
+                            ->label('Quem convocar')
+                            ->options([
+                                'aprovado'      => 'Somente aprovados (dentro das vagas)',
+                                'classificavel' => 'Aprovados + classificáveis',
+                            ])
+                            ->default('aprovado')
+                            ->required(),
+                    ])
+                    ->action(function (Etapa $record, array $data) {
+                        $r = app(ConvocacaoService::class)->convocar($record, [
+                            'criterio' => $data['criterio'] ?? 'aprovado',
+                        ]);
+                        Notification::make()
+                            ->title($r['convocados'] > 0 ? 'Convocações geradas' : 'Ninguém convocado')
+                            ->body("Convocados: {$r['convocados']} (critério: {$r['criterio']}). Publique na tela de Convocações.")
+                            ->color($r['convocados'] > 0 ? 'success' : 'warning')
                             ->send();
                     }),
                 EditAction::make(),
