@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Etapas\Tables;
 
 use App\Models\Etapa;
 use App\Services\ApuracaoService;
+use App\Services\EnsalamentoService;
 use App\Services\ImportarNotasService;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
@@ -11,7 +12,9 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -109,6 +112,44 @@ class EtapasTable
                             ->title('Apuração concluída')
                             ->body("Apurados: {$r['apurados']} · Eliminados: {$r['eliminados']} · Classificados: {$r['classificados']} · Aprovados (dentro das vagas): {$r['aprovados']}")
                             ->success()
+                            ->send();
+                    }),
+                Action::make('ensalar')
+                    ->label('Ensalar')
+                    ->icon('heroicon-o-building-office-2')
+                    ->color('gray')
+                    ->modalHeading('Ensalamento (alocar em salas)')
+                    ->modalSubmitActionLabel('Ensalar')
+                    ->modalDescription('Distribui os candidatos nas salas do concurso respeitando a capacidade. Refaz a alocação desta etapa do zero.')
+                    ->schema([
+                        Select::make('ordem')
+                            ->label('Ordem dos candidatos')
+                            ->options([
+                                'nome'             => 'Alfabética (nome)',
+                                'numero_inscricao' => 'Nº de inscrição',
+                            ])
+                            ->default('nome')
+                            ->required(),
+                        Toggle::make('incluir_pendentes')
+                            ->label('Incluir inscrições pendentes')
+                            ->helperText('Por padrão aloca apenas as confirmadas.')
+                            ->default(false),
+                    ])
+                    ->action(function (Etapa $record, array $data) {
+                        $r = app(EnsalamentoService::class)->ensalar($record, [
+                            'ordem'             => $data['ordem'] ?? 'nome',
+                            'incluir_pendentes' => (bool) ($data['incluir_pendentes'] ?? false),
+                        ]);
+                        $corpo = "Alocados: {$r['alocados']} em {$r['salas_usadas']} sala(s) · Candidatos: {$r['candidatos']} · Capacidade: {$r['capacidade_total']}";
+                        $semVaga = $r['sem_vaga'] > 0;
+                        if ($semVaga) {
+                            $corpo .= "\n\n⚠ {$r['sem_vaga']} sem vaga — capacidade insuficiente.";
+                        }
+                        Notification::make()
+                            ->title($r['alocados'] > 0 ? 'Ensalamento concluído' : 'Nada alocado')
+                            ->body($corpo)
+                            ->color($semVaga ? 'warning' : ($r['alocados'] > 0 ? 'success' : 'danger'))
+                            ->persistent()
                             ->send();
                     }),
                 EditAction::make(),
