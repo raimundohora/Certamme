@@ -20,6 +20,20 @@ class ResultadosTable
                     ->placeholder('—')->alignCenter()->badge()->color('primary'),
                 TextColumn::make('classificacao_cota')->label('Classif. cota')->sortable()
                     ->placeholder('—')->alignCenter()->toggleable(),
+                TextColumn::make('situacao')->label('Situação')->badge()
+                    ->formatStateUsing(fn ($state) => match ($state) {
+                        'aprovado'      => 'Aprovado',
+                        'classificavel' => 'Classificável',
+                        'eliminado'     => 'Eliminado',
+                        default         => '—',
+                    })
+                    ->color(fn ($state) => match ($state) {
+                        'aprovado'      => 'success',
+                        'classificavel' => 'warning',
+                        'eliminado'     => 'danger',
+                        default         => 'gray',
+                    })
+                    ->sortable(),
                 TextColumn::make('inscricao.numero_inscricao')->label('Nº insc.')->searchable()->toggleable(),
                 TextColumn::make('inscricao.nome')->label('Candidato')->searchable()->sortable(),
                 TextColumn::make('inscricao.modalidade')->label('Modalidade')->badge()
@@ -28,7 +42,8 @@ class ResultadosTable
                 TextColumn::make('total')->label('Total')->numeric(2)->sortable(),
                 TextColumn::make('acertos')->label('Acertos')->sortable()->toggleable(),
                 IconColumn::make('eliminado')->label('Eliminado')->boolean()
-                    ->trueColor('danger')->falseColor('success'),
+                    ->trueColor('danger')->falseColor('success')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('calculado_em')->label('Apurado em')->dateTime('d/m/Y H:i')->sortable()->toggleable(),
             ])
             ->filters([])

@@ -14,7 +14,7 @@ class Resultado extends Model implements Auditable
     protected $table = 'resultados';
     protected $fillable = [
         'tenant_id', 'etapa_id', 'inscricao_id',
-        'total', 'acertos', 'eliminado', 'classificacao', 'classificacao_cota', 'calculado_em',
+        'total', 'acertos', 'eliminado', 'situacao', 'classificacao', 'classificacao_cota', 'calculado_em',
     ];
     protected $casts = [
         'total'         => 'decimal:2',

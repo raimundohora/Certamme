@@ -107,7 +107,7 @@ class EtapasTable
                         $r = app(ApuracaoService::class)->apurarEtapa($record);
                         Notification::make()
                             ->title('Apuração concluída')
-                            ->body("Apurados: {$r['apurados']} · Eliminados: {$r['eliminados']} · Classificados: {$r['classificados']}")
+                            ->body("Apurados: {$r['apurados']} · Eliminados: {$r['eliminados']} · Classificados: {$r['classificados']} · Aprovados (dentro das vagas): {$r['aprovados']}")
                             ->success()
                             ->send();
                     }),
