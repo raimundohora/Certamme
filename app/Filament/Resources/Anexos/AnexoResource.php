@@ -23,6 +23,10 @@ class AnexoResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static string | \UnitEnum | null $navigationGroup = 'Configuração do Concurso';
+
+    protected static ?int $navigationSort = 50;
+
     public static function form(Schema $schema): Schema
     {
         return AnexoForm::configure($schema);

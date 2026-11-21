@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Resultados\Schemas;
 
-use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -14,12 +14,13 @@ class ResultadoForm
     {
         return $schema
             ->components([
-                Select::make('tenant_id')
-                    ->relationship('tenant', 'nome')
-                    ->hidden(),
-                TextInput::make('classificacao')
-                    ->numeric(),
-                DateTimePicker::make('calculado_em'),
+                Select::make('etapa_id')->label('Etapa id')->relationship('etapa', 'ordem')->searchable()->required(),
+                Select::make('inscricao_id')->label('Inscricao id')->relationship('inscricao', 'nome')->searchable()->required(),
+                TextInput::make('total')->label('Total')->numeric(),
+                TextInput::make('acertos')->label('Acertos')->numeric(),
+                Toggle::make('eliminado')->label('Eliminado'),
+                TextInput::make('classificacao')->label('Classificacao')->numeric(),
+                DatePicker::make('calculado_em')->label('Calculado em'),
             ]);
     }
 }

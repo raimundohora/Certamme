@@ -14,21 +14,14 @@ class ProvaSubjetivasTable
     {
         return $table
             ->columns([
-                TextColumn::make('status')
-                    ->badge()
-                    ->searchable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('codigo_controle')->label('Codigo controle')->searchable()->sortable(),
+                TextColumn::make('etapa.ordem')->label('Etapa')->searchable()->sortable(),
+                TextColumn::make('inscricao.nome')->label('Inscricao')->searchable()->sortable(),
+                TextColumn::make('nota_final')->label('Nota final')->sortable()->toggleable(),
+                TextColumn::make('status')->label('Status')->badge()->sortable(),
+                TextColumn::make('created_at')->label('Criado em')->dateTime('d/m/Y H:i')->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->recordActions([
                 EditAction::make(),
             ])

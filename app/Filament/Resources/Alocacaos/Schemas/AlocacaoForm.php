@@ -12,12 +12,10 @@ class AlocacaoForm
     {
         return $schema
             ->components([
-                Select::make('tenant_id')
-                    ->relationship('tenant', 'nome')
-                    ->hidden(),
-                TextInput::make('carteira')
-                    ->required()
-                    ->numeric(),
+                Select::make('etapa_id')->label('Etapa id')->relationship('etapa', 'ordem')->searchable()->required(),
+                Select::make('inscricao_id')->label('Inscricao id')->relationship('inscricao', 'nome')->searchable()->required(),
+                Select::make('sala_id')->label('Sala id')->relationship('sala', 'nome')->searchable()->required(),
+                TextInput::make('carteira')->label('Carteira')->maxLength(255),
             ]);
     }
 }

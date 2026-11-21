@@ -20,6 +20,10 @@ class CandidatoResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static string | \UnitEnum | null $navigationGroup = 'Candidatos';
+
+    protected static ?int $navigationSort = 10;
+
     public static function form(Schema $schema): Schema
     {
         return CandidatoForm::configure($schema);

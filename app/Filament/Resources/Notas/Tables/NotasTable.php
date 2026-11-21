@@ -15,29 +15,16 @@ class NotasTable
     {
         return $table
             ->columns([
-                TextColumn::make('nota_bruta')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('nota_final')
-                    ->numeric()
-                    ->sortable(),
-                IconColumn::make('eliminado')
-                    ->boolean(),
-                TextColumn::make('calculada_em')
-                    ->dateTime()
-                    ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('disciplina')->label('Disciplina')->searchable()->sortable(),
+                TextColumn::make('inscricao.nome')->label('Inscricao')->searchable()->sortable(),
+                TextColumn::make('etapa.ordem')->label('Etapa')->searchable()->sortable(),
+                TextColumn::make('acertos')->label('Acertos')->sortable()->toggleable(),
+                TextColumn::make('nota_bruta')->label('Nota bruta')->sortable()->toggleable(),
+                TextColumn::make('nota_final')->label('Nota final')->sortable()->toggleable(),
+                IconColumn::make('eliminado')->label('Eliminado')->boolean(),
+                TextColumn::make('created_at')->label('Criado em')->dateTime('d/m/Y H:i')->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->recordActions([
                 EditAction::make(),
             ])

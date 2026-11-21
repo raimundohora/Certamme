@@ -14,29 +14,16 @@ class InscricaosTable
     {
         return $table
             ->columns([
-                TextColumn::make('tenant.nome')
-                    ->label('Organizadora')
-                    ->searchable(),
-                TextColumn::make('concurso.id')
-                    ->searchable(),
-                TextColumn::make('cargo.id')
-                    ->searchable(),
-                TextColumn::make('numero_inscricao')
-                    ->searchable(),
-                TextColumn::make('nome')
-                    ->searchable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('nome')->label('Nome')->searchable()->sortable(),
+                TextColumn::make('concurso.nome')->label('Concurso')->searchable()->sortable(),
+                TextColumn::make('candidato.nome')->label('Candidato')->searchable()->sortable(),
+                TextColumn::make('cargo.nome')->label('Cargo')->searchable()->sortable(),
+                TextColumn::make('numero_inscricao')->label('Numero inscricao')->sortable()->toggleable(),
+                TextColumn::make('modalidade')->label('Modalidade')->sortable()->toggleable(),
+                TextColumn::make('status')->label('Status')->badge()->sortable(),
+                TextColumn::make('created_at')->label('Criado em')->dateTime('d/m/Y H:i')->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->recordActions([
                 EditAction::make(),
             ])

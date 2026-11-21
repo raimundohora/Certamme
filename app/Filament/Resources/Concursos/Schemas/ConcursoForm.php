@@ -12,14 +12,28 @@ class ConcursoForm
     {
         return $schema
             ->components([
-                Select::make('tenant_id')
-                    ->relationship('tenant', 'nome')
-                    ->hidden(),
-                TextInput::make('ano')
-                    ->numeric(),
-                TextInput::make('situacao')
+                TextInput::make('nome')
+                    ->label('Nome do concurso')
                     ->required()
-                    ->default('rascunho'),
+                    ->maxLength(255),
+                TextInput::make('ano')
+                    ->label('Ano')
+                    ->numeric()
+                    ->minValue(2000)
+                    ->maxValue(2100),
+                Select::make('situacao')
+                    ->label('Situação')
+                    ->options([
+                        'rascunho' => 'Rascunho',
+                        'aberto' => 'Inscrições abertas',
+                        'em_andamento' => 'Em andamento',
+                        'homologado' => 'Homologado',
+                        'finalizado' => 'Finalizado',
+                        'suspenso' => 'Suspenso',
+                        'cancelado' => 'Cancelado',
+                    ])
+                    ->default('rascunho')
+                    ->required(),
             ]);
     }
 }

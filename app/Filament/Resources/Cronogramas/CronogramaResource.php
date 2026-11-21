@@ -23,6 +23,10 @@ class CronogramaResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static string | \UnitEnum | null $navigationGroup = 'Configuração do Concurso';
+
+    protected static ?int $navigationSort = 30;
+
     public static function form(Schema $schema): Schema
     {
         return CronogramaForm::configure($schema);

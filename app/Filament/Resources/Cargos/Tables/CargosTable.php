@@ -14,12 +14,21 @@ class CargosTable
     {
         return $table
             ->columns([
+                TextColumn::make('nome')
+                    ->label('Cargo')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('concurso.nome')
+                    ->label('Concurso')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('vagas')
+                    ->label('Vagas')
+                    ->numeric()
+                    ->sortable(),
                 TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Criado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

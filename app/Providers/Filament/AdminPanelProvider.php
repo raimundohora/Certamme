@@ -28,6 +28,16 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->navigationGroups([
+                'Configuração do Concurso',
+                'Inscrições',
+                'Candidatos',
+                'Provas & Gabarito',
+                'Títulos',
+                'Resultados & Recursos',
+                'Locais & Alocação',
+                'Sistema',
+            ])
             ->plugin(\BezhanSalleh\FilamentShield\FilamentShieldPlugin::make())
             ->colors([
                 'primary' => Color::Amber,

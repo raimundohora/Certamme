@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Titulos\Schemas;
 
-use App\Enums\StatusTitulo;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -13,11 +12,12 @@ class TituloForm
     {
         return $schema
             ->components([
-                Select::make('tenant_id')
-                    ->relationship('tenant', 'nome')
-                    ->hidden(),
-                TextInput::make('avaliador'),
-                TextInput::make('conferente'),
+                Select::make('inscricao_id')->label('Inscricao id')->relationship('inscricao', 'nome')->searchable()->required(),
+                TextInput::make('titulo_tipo_id')->label('Titulo tipo id')->numeric(),
+                TextInput::make('pontos')->label('Pontos')->maxLength(255),
+                TextInput::make('status')->label('Status')->maxLength(255),
+                TextInput::make('avaliador')->label('Avaliador')->maxLength(255),
+                TextInput::make('conferente')->label('Conferente')->maxLength(255),
             ]);
     }
 }

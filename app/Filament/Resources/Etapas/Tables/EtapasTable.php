@@ -5,7 +5,6 @@ namespace App\Filament\Resources\Etapas\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -15,31 +14,15 @@ class EtapasTable
     {
         return $table
             ->columns([
-                TextColumn::make('tipo')
-                    ->badge()
-                    ->searchable(),
-                IconColumn::make('eliminatoria')
-                    ->boolean(),
-                IconColumn::make('classificatoria')
-                    ->boolean(),
-                TextColumn::make('nota_minima')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('peso')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('ordem')->label('Ordem')->searchable()->sortable(),
+                TextColumn::make('concurso.nome')->label('Concurso')->searchable()->sortable(),
+                TextColumn::make('cargo.nome')->label('Cargo')->searchable()->sortable(),
+                TextColumn::make('tipo')->label('Tipo')->badge()->sortable(),
+                TextColumn::make('eliminatoria')->label('Eliminatoria')->sortable()->toggleable(),
+                TextColumn::make('classificatoria')->label('Classificatoria')->sortable()->toggleable(),
+                TextColumn::make('created_at')->label('Criado em')->dateTime('d/m/Y H:i')->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->recordActions([
                 EditAction::make(),
             ])

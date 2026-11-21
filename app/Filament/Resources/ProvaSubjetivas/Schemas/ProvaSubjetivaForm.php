@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\ProvaSubjetivas\Schemas;
 
-use App\Enums\StatusSubjetiva;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -13,9 +12,11 @@ class ProvaSubjetivaForm
     {
         return $schema
             ->components([
-                Select::make('tenant_id')
-                    ->relationship('tenant', 'nome')
-                    ->hidden(),
+                Select::make('etapa_id')->label('Etapa id')->relationship('etapa', 'ordem')->searchable()->required(),
+                Select::make('inscricao_id')->label('Inscricao id')->relationship('inscricao', 'nome')->searchable()->required(),
+                TextInput::make('codigo_controle')->label('Codigo controle')->maxLength(255),
+                TextInput::make('nota_final')->label('Nota final')->maxLength(255),
+                TextInput::make('status')->label('Status')->maxLength(255),
             ]);
     }
 }

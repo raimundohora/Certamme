@@ -14,28 +14,13 @@ class LocalProvasTable
     {
         return $table
             ->columns([
-                TextColumn::make('tenant.id')
-                    ->searchable(),
-                TextColumn::make('concurso.id')
-                    ->searchable(),
-                TextColumn::make('nome')
-                    ->searchable(),
-                TextColumn::make('endereco')
-                    ->searchable(),
-                TextColumn::make('cidade')
-                    ->searchable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('nome')->label('Nome')->searchable()->sortable(),
+                TextColumn::make('concurso.nome')->label('Concurso')->searchable()->sortable(),
+                TextColumn::make('endereco')->label('Endereco')->sortable()->toggleable(),
+                TextColumn::make('cidade')->label('Cidade')->sortable()->toggleable(),
+                TextColumn::make('created_at')->label('Criado em')->dateTime('d/m/Y H:i')->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->recordActions([
                 EditAction::make(),
             ])

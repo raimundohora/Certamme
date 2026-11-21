@@ -2,10 +2,8 @@
 
 namespace App\Filament\Resources\Etapas\Schemas;
 
-use App\Enums\TipoEtapa;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 
 class EtapaForm
@@ -14,16 +12,15 @@ class EtapaForm
     {
         return $schema
             ->components([
-                Select::make('tenant_id')
-                    ->relationship('tenant', 'nome')
-                    ->hidden(),
-                TextInput::make('nota_minima')
-                    ->numeric(),
-                TextInput::make('peso')
-                    ->required()
-                    ->numeric()
-                    ->default(1),
-                TextInput::make('config'),
+                Select::make('concurso_id')->label('Concurso id')->relationship('concurso', 'nome')->searchable()->required(),
+                Select::make('cargo_id')->label('Cargo id')->relationship('cargo', 'nome')->searchable()->required(),
+                TextInput::make('ordem')->label('Ordem')->numeric(),
+                TextInput::make('tipo')->label('Tipo')->maxLength(255),
+                TextInput::make('eliminatoria')->label('Eliminatoria')->maxLength(255),
+                TextInput::make('classificatoria')->label('Classificatoria')->maxLength(255),
+                TextInput::make('nota_minima')->label('Nota minima')->maxLength(255),
+                TextInput::make('peso')->label('Peso')->numeric(),
+                TextInput::make('config')->label('Config')->maxLength(255),
             ]);
     }
 }

@@ -14,14 +14,24 @@ class ConcursosTable
     {
         return $table
             ->columns([
+                TextColumn::make('nome')
+                    ->label('Concurso')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('ano')
+                    ->label('Ano')
+                    ->sortable(),
                 TextColumn::make('situacao')
-                    ->searchable(),
+                    ->label('Situação')
+                    ->badge()
+                    ->sortable(),
+                TextColumn::make('cargos_count')
+                    ->label('Cargos')
+                    ->counts('cargos')
+                    ->sortable(),
                 TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Criado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

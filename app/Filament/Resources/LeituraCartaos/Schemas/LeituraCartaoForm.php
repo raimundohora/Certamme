@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\LeituraCartaos\Schemas;
 
-use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
 class LeituraCartaoForm
@@ -12,21 +12,11 @@ class LeituraCartaoForm
     {
         return $schema
             ->components([
-                Select::make('prova_id')
-                    ->label('Prova')
-                    ->relationship('prova', 'nome')
-                    ->searchable()
-                    ->required(),
-                Select::make('inscricao_id')
-                    ->label('Inscrição')
-                    ->relationship('inscricao', 'numero_inscricao')
-                    ->searchable()
-                    ->required(),
-                KeyValue::make('respostas')
-                    ->label('Respostas (questão → letra)')
-                    ->keyLabel('Questão')
-                    ->valueLabel('Resposta')
-                    ->reorderable(false),
+                Select::make('prova_id')->label('Prova id')->relationship('prova', 'nome')->searchable()->required(),
+                Select::make('inscricao_id')->label('Inscricao id')->relationship('inscricao', 'nome')->searchable()->required(),
+                TextInput::make('importacao_id')->label('Importacao id')->numeric(),
+                TextInput::make('respostas')->label('Respostas')->maxLength(255),
+                TextInput::make('origem')->label('Origem')->maxLength(255),
             ]);
     }
 }

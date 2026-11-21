@@ -14,18 +14,13 @@ class AlocacaosTable
     {
         return $table
             ->columns([
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('carteira')->label('Carteira')->searchable()->sortable(),
+                TextColumn::make('etapa.ordem')->label('Etapa')->searchable()->sortable(),
+                TextColumn::make('inscricao.nome')->label('Inscricao')->searchable()->sortable(),
+                TextColumn::make('sala.nome')->label('Sala')->searchable()->sortable(),
+                TextColumn::make('created_at')->label('Criado em')->dateTime('d/m/Y H:i')->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->recordActions([
                 EditAction::make(),
             ])

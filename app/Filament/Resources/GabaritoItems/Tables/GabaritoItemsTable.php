@@ -14,30 +14,14 @@ class GabaritoItemsTable
     {
         return $table
             ->columns([
-                TextColumn::make('disciplina')
-                    ->searchable(),
-                TextColumn::make('resposta_correta')
-                    ->searchable(),
-                TextColumn::make('situacao')
-                    ->badge()
-                    ->searchable(),
-                TextColumn::make('resposta_nova')
-                    ->searchable(),
-                TextColumn::make('peso')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('numero')->label('Numero')->searchable()->sortable(),
+                TextColumn::make('prova.nome')->label('Prova')->searchable()->sortable(),
+                TextColumn::make('disciplina')->label('Disciplina')->sortable()->toggleable(),
+                TextColumn::make('resposta_correta')->label('Resposta correta')->sortable()->toggleable(),
+                TextColumn::make('situacao')->label('Situacao')->badge()->sortable(),
+                TextColumn::make('created_at')->label('Criado em')->dateTime('d/m/Y H:i')->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->recordActions([
                 EditAction::make(),
             ])

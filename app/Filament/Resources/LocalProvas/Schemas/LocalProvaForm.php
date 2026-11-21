@@ -12,11 +12,10 @@ class LocalProvaForm
     {
         return $schema
             ->components([
-                Select::make('tenant_id')
-                    ->relationship('tenant', 'nome')
-                    ->hidden(),
-                TextInput::make('endereco'),
-                TextInput::make('cidade'),
+                Select::make('concurso_id')->label('Concurso id')->relationship('concurso', 'nome')->searchable()->required(),
+                TextInput::make('nome')->label('Nome')->maxLength(255)->required(),
+                TextInput::make('endereco')->label('Endereco')->maxLength(255),
+                TextInput::make('cidade')->label('Cidade')->maxLength(255),
             ]);
     }
 }

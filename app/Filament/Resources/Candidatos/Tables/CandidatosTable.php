@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Candidatos\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -14,14 +15,30 @@ class CandidatosTable
     {
         return $table
             ->columns([
-                TextColumn::make('telefone')
+                TextColumn::make('nome')
+                    ->label('Nome')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('cpf')
+                    ->label('CPF')
                     ->searchable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
+                TextColumn::make('email')
+                    ->label('E-mail')
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('cidade')
+                    ->label('Cidade')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->toggleable(),
+                TextColumn::make('uf')
+                    ->label('UF')
+                    ->sortable(),
+                IconColumn::make('pcd')
+                    ->label('PcD')
+                    ->boolean(),
+                TextColumn::make('created_at')
+                    ->label('Cadastro')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

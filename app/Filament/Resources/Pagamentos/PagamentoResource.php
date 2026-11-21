@@ -20,6 +20,10 @@ class PagamentoResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static string | \UnitEnum | null $navigationGroup = 'Inscrições';
+
+    protected static ?int $navigationSort = 20;
+
     public static function form(Schema $schema): Schema
     {
         return PagamentoForm::configure($schema);

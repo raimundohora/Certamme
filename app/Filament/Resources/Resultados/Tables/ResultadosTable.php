@@ -15,29 +15,16 @@ class ResultadosTable
     {
         return $table
             ->columns([
-                TextColumn::make('acertos')
-                    ->numeric()
-                    ->sortable(),
-                IconColumn::make('eliminado')
-                    ->boolean(),
-                TextColumn::make('classificacao')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('calculado_em')
-                    ->dateTime()
-                    ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('total')->label('Total')->searchable()->sortable(),
+                TextColumn::make('etapa.ordem')->label('Etapa')->searchable()->sortable(),
+                TextColumn::make('inscricao.nome')->label('Inscricao')->searchable()->sortable(),
+                TextColumn::make('acertos')->label('Acertos')->sortable()->toggleable(),
+                IconColumn::make('eliminado')->label('Eliminado')->boolean(),
+                TextColumn::make('classificacao')->label('Classificacao')->sortable()->toggleable(),
+                TextColumn::make('calculado_em')->label('Calculado em')->sortable()->toggleable(),
+                TextColumn::make('created_at')->label('Criado em')->dateTime('d/m/Y H:i')->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->recordActions([
                 EditAction::make(),
             ])
