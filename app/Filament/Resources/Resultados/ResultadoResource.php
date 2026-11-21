@@ -14,8 +14,12 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
+use App\Filament\Concerns\ScopedToConcursoViaInscricao;
+
 class ResultadoResource extends Resource
 {
+    use ScopedToConcursoViaInscricao;
+
     protected static ?string $model = Resultado::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;

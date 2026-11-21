@@ -14,8 +14,12 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
+use App\Filament\Concerns\ScopedToConcursoViaInscricao;
+
 class ConvocacaoResource extends Resource
 {
+    use ScopedToConcursoViaInscricao;
+
     protected static ?string $model = Convocacao::class;
 
     protected static ?string $modelLabel = 'Convocação';
