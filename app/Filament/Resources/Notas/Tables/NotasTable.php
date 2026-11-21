@@ -22,6 +22,7 @@ class NotasTable
                 TextColumn::make('nota_bruta')->label('Nota bruta')->sortable()->toggleable(),
                 TextColumn::make('nota_final')->label('Nota final')->sortable()->toggleable(),
                 IconColumn::make('eliminado')->label('Eliminado')->boolean(),
+                IconColumn::make('override')->label('Override')->boolean(),
                 TextColumn::make('created_at')->label('Criado em')->dateTime('d/m/Y H:i')->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([])

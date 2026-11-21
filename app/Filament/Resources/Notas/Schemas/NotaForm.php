@@ -14,16 +14,16 @@ class NotaForm
     {
         return $schema
             ->components([
-                Select::make('inscricao_id')->label('Inscricao')->relationship('inscricao', 'nome')->searchable()->required(),
-                Select::make('etapa_id')->label('Etapa')->relationship('etapa', 'ordem')->searchable()->required(),
+                Select::make('inscricao_id')->label('Inscricao')->relationship('inscricao', 'nome')->searchable()->preload()->required(),
+                Select::make('etapa_id')->label('Etapa')->relationship('etapa', 'ordem')->searchable()->preload()->required(),
                 TextInput::make('disciplina')->label('Disciplina')->maxLength(255),
                 TextInput::make('acertos')->label('Acertos')->numeric(),
-                TextInput::make('nota_bruta')->label('Nota bruta')->maxLength(255),
-                TextInput::make('nota_final')->label('Nota final')->maxLength(255),
+                TextInput::make('nota_bruta')->label('Nota bruta')->numeric(),
+                TextInput::make('nota_final')->label('Nota final')->numeric(),
                 Toggle::make('eliminado')->label('Eliminado'),
                 DatePicker::make('calculada_em')->label('Calculada em'),
-                TextInput::make('override')->label('Override')->maxLength(255),
-                TextInput::make('nota_override')->label('Nota override')->maxLength(255),
+                Toggle::make('override')->label('Override'),
+                TextInput::make('nota_override')->label('Nota override')->numeric(),
                 TextInput::make('override_motivo')->label('Override motivo')->maxLength(255),
                 TextInput::make('override_por')->label('Override por')->maxLength(255),
             ]);

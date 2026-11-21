@@ -13,7 +13,7 @@ class IsencaoForm
     {
         return $schema
             ->components([
-                Select::make('inscricao_id')->label('Inscricao')->relationship('inscricao', 'nome')->searchable()->required(),
+                Select::make('inscricao_id')->label('Inscricao')->relationship('inscricao', 'nome')->searchable()->preload()->required(),
                 TextInput::make('nis')->label('Nis')->maxLength(255),
                 Textarea::make('justificativa')->label('Justificativa')->rows(3)->columnSpanFull(),
                 TextInput::make('status')->label('Status')->maxLength(255),

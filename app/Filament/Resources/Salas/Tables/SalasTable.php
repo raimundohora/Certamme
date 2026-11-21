@@ -15,6 +15,7 @@ class SalasTable
         return $table
             ->columns([
                 TextColumn::make('nome')->label('Nome')->searchable()->sortable(),
+                TextColumn::make('local.nome')->label('Local prova')->searchable()->sortable(),
                 TextColumn::make('capacidade')->label('Capacidade')->sortable()->toggleable(),
                 TextColumn::make('created_at')->label('Criado em')->dateTime('d/m/Y H:i')->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])

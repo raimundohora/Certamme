@@ -14,8 +14,8 @@ class ResultadoForm
     {
         return $schema
             ->components([
-                Select::make('etapa_id')->label('Etapa')->relationship('etapa', 'ordem')->searchable()->required(),
-                Select::make('inscricao_id')->label('Inscricao')->relationship('inscricao', 'nome')->searchable()->required(),
+                Select::make('etapa_id')->label('Etapa')->relationship('etapa', 'ordem')->searchable()->preload()->required(),
+                Select::make('inscricao_id')->label('Inscricao')->relationship('inscricao', 'nome')->searchable()->preload()->required(),
                 TextInput::make('total')->label('Total')->numeric(),
                 TextInput::make('acertos')->label('Acertos')->numeric(),
                 Toggle::make('eliminado')->label('Eliminado'),

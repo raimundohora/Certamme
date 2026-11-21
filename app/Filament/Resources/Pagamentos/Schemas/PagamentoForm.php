@@ -13,7 +13,7 @@ class PagamentoForm
     {
         return $schema
             ->components([
-                Select::make('inscricao_id')->label('Inscricao')->relationship('inscricao', 'nome')->searchable()->required(),
+                Select::make('inscricao_id')->label('Inscricao')->relationship('inscricao', 'nome')->searchable()->preload()->required(),
                 TextInput::make('valor')->label('Valor')->numeric(),
                 TextInput::make('metodo')->label('Metodo')->maxLength(255),
                 TextInput::make('status')->label('Status')->maxLength(255),

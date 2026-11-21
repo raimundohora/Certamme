@@ -16,6 +16,7 @@ class TitulosTable
             ->columns([
                 TextColumn::make('pontos')->label('Pontos')->searchable()->sortable(),
                 TextColumn::make('inscricao.nome')->label('Inscricao')->searchable()->sortable(),
+                TextColumn::make('tipo.nome')->label('Titulo tipo')->searchable()->sortable(),
                 TextColumn::make('status')->label('Status')->badge()->sortable(),
                 TextColumn::make('avaliador')->label('Avaliador')->sortable()->toggleable(),
                 TextColumn::make('conferente')->label('Conferente')->sortable()->toggleable(),

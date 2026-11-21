@@ -13,8 +13,8 @@ class CronogramaForm
     {
         return $schema
             ->components([
-                Select::make('concurso_id')->label('Concurso')->relationship('concurso', 'nome')->searchable()->required(),
-                TextInput::make('evento')->label('Evento')->maxLength(255),
+                Select::make('concurso_id')->label('Concurso')->relationship('concurso', 'nome')->searchable()->preload()->required(),
+                TextInput::make('evento')->label('Evento')->maxLength(255)->required(),
                 DatePicker::make('data')->label('Data'),
             ]);
     }

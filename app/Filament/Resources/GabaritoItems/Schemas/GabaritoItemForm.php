@@ -12,8 +12,8 @@ class GabaritoItemForm
     {
         return $schema
             ->components([
-                Select::make('prova_id')->label('Prova')->relationship('prova', 'nome')->searchable()->required(),
-                TextInput::make('numero')->label('Numero')->maxLength(255),
+                Select::make('prova_id')->label('Prova')->relationship('prova', 'nome')->searchable()->preload()->required(),
+                TextInput::make('numero')->label('Numero')->maxLength(255)->required(),
                 TextInput::make('disciplina')->label('Disciplina')->maxLength(255),
                 TextInput::make('resposta_correta')->label('Resposta correta')->maxLength(255),
                 TextInput::make('situacao')->label('Situacao')->maxLength(255),

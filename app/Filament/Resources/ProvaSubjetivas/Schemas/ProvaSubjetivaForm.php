@@ -12,10 +12,10 @@ class ProvaSubjetivaForm
     {
         return $schema
             ->components([
-                Select::make('etapa_id')->label('Etapa')->relationship('etapa', 'ordem')->searchable()->required(),
-                Select::make('inscricao_id')->label('Inscricao')->relationship('inscricao', 'nome')->searchable()->required(),
-                TextInput::make('codigo_controle')->label('Codigo controle')->maxLength(255),
-                TextInput::make('nota_final')->label('Nota final')->maxLength(255),
+                Select::make('etapa_id')->label('Etapa')->relationship('etapa', 'ordem')->searchable()->preload()->required(),
+                Select::make('inscricao_id')->label('Inscricao')->relationship('inscricao', 'nome')->searchable()->preload()->required(),
+                TextInput::make('codigo_controle')->label('Codigo controle')->maxLength(255)->required(),
+                TextInput::make('nota_final')->label('Nota final')->numeric(),
                 TextInput::make('status')->label('Status')->maxLength(255),
             ]);
     }

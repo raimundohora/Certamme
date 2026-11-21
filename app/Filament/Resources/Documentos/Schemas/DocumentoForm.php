@@ -13,7 +13,7 @@ class DocumentoForm
     {
         return $schema
             ->components([
-                Select::make('inscricao_id')->label('Inscricao')->relationship('inscricao', 'nome')->searchable()->required(),
+                Select::make('inscricao_id')->label('Inscricao')->relationship('inscricao', 'nome')->searchable()->preload()->required(),
                 TextInput::make('tipo')->label('Tipo')->maxLength(255),
                 TextInput::make('arquivo')->label('Arquivo')->maxLength(255),
                 TextInput::make('status')->label('Status')->maxLength(255),
