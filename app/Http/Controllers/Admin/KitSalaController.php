@@ -2,21 +2,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Alocacao;
 use App\Models\Etapa;
+use App\Services\KitSalaService;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class KitSalaController extends Controller
 {
     public function listaPresenca(Etapa $etapa)
     {
-        $grupos = Alocacao::where('etapa_id', $etapa->id)
-            ->with(['inscricao', 'sala.local'])
-            ->get()
-            ->groupBy('sala_id');
-        $etapa->loadMissing('concurso');
+        $dados = app(KitSalaService::class)->dadosListaPresenca($etapa);
+        $pdf = Pdf::loadView('pdf.lista-presenca', $dados)->setPaper('a4');
 
-        $pdf = Pdf::loadView('pdf.lista-presenca', compact('etapa', 'grupos'));
-        return $pdf->stream("lista-presenca-etapa-{$etapa->id}.pdf");
+        return $pdf->stream("lista-presenca-etapa-{$etapa->ordem}.pdf");
     }
 }
