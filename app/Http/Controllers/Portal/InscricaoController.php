@@ -14,6 +14,7 @@ use App\Services\PagamentoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
 
 class InscricaoController extends Controller
 {
@@ -23,19 +24,38 @@ class InscricaoController extends Controller
         if (! $candidato->perfilCompleto()) {
             return redirect()->route('portal.perfil')->with('info', 'Complete seu cadastro antes de se inscrever.');
         }
-        $concurso->load('cargos');
+        $concurso->load(['cargos', 'camposInscricao']);
         return view('portal.inscrever', compact('concurso'));
     }
 
     public function store(Request $request, Concurso $concurso)
     {
-        $data = $request->validate([
+        $concurso->load('camposInscricao');
+        $campos = $concurso->camposInscricao->where('visivel', true);
+
+        $rules = [
             'cargo_id' => 'required|exists:cargos,id',
             'cidade_prova' => 'required|string|max:255',
             'modalidade' => 'required',
             'metodo' => 'required|in:pix,boleto',
             'condicao_especial' => 'nullable|string|max:255',
-        ]);
+        ];
+        $attributes = [];
+        foreach ($campos as $c) {
+            $key = 'campo_' . $c->id;
+            $attributes[$key] = $c->rotulo;
+            $r = [$c->obrigatorio ? 'required' : 'nullable'];
+            switch ($c->tipo->value) {
+                case 'numero':   $r[] = 'numeric'; break;
+                case 'data':     $r[] = 'date'; break;
+                case 'checkbox': $r[] = 'boolean'; break;
+                case 'select':   $r[] = 'string'; if ($c->opcoes) { $r[] = Rule::in($c->opcoes); } break;
+                default:         $r[] = 'string'; $r[] = 'max:1000';
+            }
+            $rules[$key] = $r;
+        }
+
+        $data = $request->validate($rules, [], $attributes);
         $candidato = Auth::guard('candidato')->user();
 
         $existe = Inscricao::where('concurso_id', $concurso->id)->where('candidato_id', $candidato->id)->first();
@@ -46,6 +66,14 @@ class InscricaoController extends Controller
         $cargo = Cargo::findOrFail($data['cargo_id']);
         $taxa = (float) ($cargo->taxa_inscricao ?? 0);
 
+        // Monta as respostas dos campos dinâmicos (snapshot rótulo+valor)
+        $extras = [];
+        foreach ($campos as $c) {
+            $key = 'campo_' . $c->id;
+            $valor = $c->tipo->value === 'checkbox' ? $request->boolean($key) : ($data[$key] ?? null);
+            $extras[$c->chave] = ['rotulo' => $c->rotulo, 'tipo' => $c->tipo->value, 'valor' => $valor];
+        }
+
         $numero = str_pad((string) (Inscricao::where('concurso_id', $concurso->id)->count() + 1), 5, '0', STR_PAD_LEFT);
         $inscricao = Inscricao::create([
             'concurso_id' => $concurso->id,
@@ -55,9 +83,9 @@ class InscricaoController extends Controller
             'nome' => $candidato->nome,
             'modalidade' => Modalidade::from($data['modalidade']),
             'status' => $taxa > 0 ? StatusInscricao::PENDENTE : StatusInscricao::CONFIRMADA,
+            'campos_extras' => $extras ?: null,
         ]);
 
-        // Inscrição com taxa: gera a cobrança no gateway. Gratuita: já fica confirmada.
         if ($taxa > 0) {
             $pagamento = app(PagamentoService::class)->criar($inscricao, $taxa, MetodoPagamento::from($data['metodo']));
             try {
@@ -67,7 +95,6 @@ class InscricaoController extends Controller
             }
         }
 
-        // e-mail de inscricao realizada (nao quebra o fluxo se falhar)
         if ($candidato->email) {
             try {
                 Mail::to($candidato->email)->send(new InscricaoRealizada($inscricao->load(['concurso', 'cargo'])));

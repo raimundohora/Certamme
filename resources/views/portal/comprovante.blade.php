@@ -44,6 +44,16 @@
     @if(empty($pagamento) && $inscricao->status->value==='confirmada')
       <div class="mt-5 border rounded p-4 bg-emerald-50 text-emerald-700 text-sm font-medium">Inscrição gratuita — sem taxa a pagar.</div>
     @endif
+    @if(! empty($inscricao->campos_extras))
+      <div class="mt-5 border-t pt-4">
+        <div class="text-xs font-semibold text-slate-400 uppercase mb-2">Informações adicionais</div>
+        <dl class="divide-y text-sm">
+          @foreach($inscricao->campos_extras as $campo)
+            <div class="py-2 flex justify-between gap-4"><dt class="text-slate-500">{{ $campo['rotulo'] ?? '' }}</dt><dd class="text-right">{{ is_bool($campo['valor'] ?? null) ? ($campo['valor'] ? 'Sim' : 'Não') : (($campo['valor'] ?? '') !== '' ? $campo['valor'] : '—') }}</dd></div>
+          @endforeach
+        </dl>
+      </div>
+    @endif
   </div>
 
   {{-- Isencao de taxa --}}

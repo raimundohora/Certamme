@@ -31,6 +31,38 @@
         <option value="cota_indigena">Cota indígena</option>
       </select>
     </div>
+
+    {{-- Campos dinâmicos configurados pela organizadora --}}
+    @foreach($concurso->camposInscricao->where('visivel', true) as $campo)
+      @php $k = 'campo_'.$campo->id; @endphp
+      <div>
+        <label class="block text-sm mb-1">{{ $campo->rotulo }}@if($campo->obrigatorio) *@endif</label>
+        @switch($campo->tipo->value)
+          @case('textarea')
+            <textarea name="{{ $k }}" rows="3" class="w-full border rounded px-3 py-2" @if($campo->obrigatorio) required @endif>{{ old($k) }}</textarea>
+            @break
+          @case('numero')
+            <input type="number" step="any" name="{{ $k }}" value="{{ old($k) }}" class="w-full border rounded px-3 py-2" @if($campo->obrigatorio) required @endif>
+            @break
+          @case('data')
+            <input type="date" name="{{ $k }}" value="{{ old($k) }}" class="w-full border rounded px-3 py-2" @if($campo->obrigatorio) required @endif>
+            @break
+          @case('select')
+            <select name="{{ $k }}" class="w-full border rounded px-3 py-2" @if($campo->obrigatorio) required @endif>
+              <option value="">Selecione...</option>
+              @foreach(($campo->opcoes ?? []) as $op)<option value="{{ $op }}" @selected(old($k)==$op)>{{ $op }}</option>@endforeach
+            </select>
+            @break
+          @case('checkbox')
+            <label class="inline-flex items-center gap-2 text-sm"><input type="checkbox" name="{{ $k }}" value="1" @checked(old($k))> Sim</label>
+            @break
+          @default
+            <input type="text" name="{{ $k }}" value="{{ old($k) }}" class="w-full border rounded px-3 py-2" @if($campo->obrigatorio) required @endif>
+        @endswitch
+        @if($campo->ajuda)<p class="text-xs text-slate-400 mt-1">{{ $campo->ajuda }}</p>@endif
+      </div>
+    @endforeach
+
     <div id="bloco_metodo"><label class="block text-sm mb-1">Forma de pagamento *</label>
       <select name="metodo" class="w-full border rounded px-3 py-2">
         <option value="pix" @selected(old('metodo')=='pix')>Pix</option>
@@ -42,7 +74,6 @@
   </form>
 </div>
 <script>
-  // Esconde a forma de pagamento quando o cargo for gratuito.
   (function(){
     var sel = document.getElementById('cargo_id');
     var bloco = document.getElementById('bloco_metodo');

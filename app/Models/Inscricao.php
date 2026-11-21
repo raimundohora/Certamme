@@ -16,11 +16,12 @@ class Inscricao extends Model
     protected $table = 'inscricoes';
     protected $fillable = [
         'tenant_id', 'concurso_id', 'candidato_id', 'cargo_id',
-        'numero_inscricao', 'nome', 'modalidade', 'status',
+        'numero_inscricao', 'nome', 'modalidade', 'status', 'campos_extras',
     ];
     protected $casts = [
         'modalidade' => Modalidade::class,
         'status'     => StatusInscricao::class,
+        'campos_extras' => 'array',
     ];
 
     public function concurso(): BelongsTo { return $this->belongsTo(Concurso::class); }
