@@ -15,4 +15,11 @@ return [
      */
     'default_tenant' => env('CERTAMME_DEFAULT_TENANT'),
 
+    /*
+     | Quando true, o domínio-base puro (apex/www) exibe a VITRINE do produto
+     | Certamme em vez do portal de uma organizadora. Ligar só quando os portais
+     | das organizadoras já estiverem acessíveis por subdomínio (DNS wildcard no ar).
+     */
+    'landing_on_apex' => (bool) env('CERTAMME_LANDING_ON_APEX', false),
+
 ];
