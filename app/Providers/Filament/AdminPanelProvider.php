@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Http\Middleware\SetPortalTenant;
+use App\Models\Tenant;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -30,6 +31,10 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            // White-label: nome e logo da organizadora atual (resolvida pelo subdominio).
+            ->brandName(fn (): string => Tenant::current()?->nome ?? 'Certamme')
+            ->brandLogo(fn () => Tenant::current()?->logoUrl())
+            ->brandLogoHeight('2rem')
             ->renderHook(
                 PanelsRenderHook::TOPBAR_START,
                 fn (): string => view('filament.concurso-banner')->render(),
@@ -68,8 +73,6 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-                // Resolve a organizadora pelo subdomínio/domínio ANTES do Authenticate,
-                // para o canAccessPanel e o escopo de dados valerem no admin.
                 SetPortalTenant::class,
             ])
             ->authMiddleware([
