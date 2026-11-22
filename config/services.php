@@ -41,4 +41,9 @@ return [
         'webhook_token' => env('ASAAS_WEBHOOK_TOKEN'),
     ],
 
+
+    'omr' => [
+        'url' => env('OMR_SERVICE_URL', 'http://omr-service:8000'),
+    ],
+
 ];

@@ -1,0 +1,14 @@
+services:
+  omr-service:
+    build: .
+    image: certamme-omr:1.0
+    container_name: omr-service
+    restart: unless-stopped
+    networks:
+      - certamme_sail
+    ports:
+      - "127.0.0.1:9108:8000"   # só localhost (depuração); Laravel usa a rede interna
+
+networks:
+  certamme_sail:
+    external: true

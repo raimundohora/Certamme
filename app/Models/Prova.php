@@ -15,4 +15,5 @@ class Prova extends Model
 
     public function etapa(): BelongsTo { return $this->belongsTo(Etapa::class); }
     public function itens(): HasMany { return $this->hasMany(GabaritoItem::class); }
+    public function leituras(): HasMany { return $this->hasMany(LeituraCartao::class); }
 }
