@@ -5,6 +5,10 @@
 <h1 class="text-2xl font-bold mt-2 mb-1">{{ $concurso->nome }}</h1>
 <div class="text-slate-500 mb-6">Ano {{ $concurso->ano }} · {{ ucfirst($concurso->situacao) }}</div>
 
+@if(!empty($temClassificacao))
+<a href="{{ route('portal.classificacao',$concurso) }}" class="inline-flex items-center gap-2 mb-6 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded font-medium">🏆 Ver classificação</a>
+@endif
+
 @if($concurso->cronogramas->isNotEmpty())
 <h2 class="font-semibold mb-2">Cronograma</h2>
 <div class="bg-white rounded-lg shadow divide-y mb-6">

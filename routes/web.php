@@ -10,6 +10,7 @@ use App\Http\Controllers\Portal\RecursoController;
 use App\Http\Controllers\Portal\PainelController;
 use App\Http\Controllers\Portal\ResultadoController;
 use App\Http\Controllers\Portal\CertificadoController;
+use App\Http\Controllers\Portal\ClassificacaoController;
 use App\Http\Controllers\Admin\KitSalaController;
 use App\Http\Controllers\Admin\RelatorioController;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,7 @@ Route::middleware('portal.tenant')->group(function () {
     });
 
     Route::get('/concursos/{concurso}', [ConcursoController::class, 'show'])->name('portal.concurso');
+    Route::get('/concursos/{concurso}/classificacao', [ClassificacaoController::class, 'concurso'])->name('portal.classificacao');
 
     // Autenticação pública de documentos (sem login): /autenticar e /autenticar/{codigo}
     Route::get('/autenticar/{codigo?}', [CertificadoController::class, 'verificar'])->name('portal.autenticar');

@@ -43,6 +43,7 @@ class EtapasTable
                 TextColumn::make('peso')->label('Peso')->sortable()->toggleable(),
                 TextColumn::make('notas_count')->label('Notas')->counts('notas')->toggleable(),
                 TextColumn::make('resultados_count')->label('Resultados')->counts('resultados')->toggleable(),
+                IconColumn::make('resultado_publicado')->label('Classif. pública')->boolean(),
                 TextColumn::make('created_at')->label('Criado em')->dateTime('d/m/Y H:i')->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([])
@@ -117,6 +118,23 @@ class EtapasTable
                         Notification::make()
                             ->title('Apuração concluída')
                             ->body("Apurados: {$r['apurados']} · Eliminados: {$r['eliminados']} · Classificados: {$r['classificados']} · Aprovados (dentro das vagas): {$r['aprovados']}")
+                            ->success()
+                            ->send();
+                    }),
+                Action::make('publicar_classificacao')
+                    ->label(fn (Etapa $record): string => $record->resultado_publicado ? 'Despublicar classificação' : 'Publicar classificação')
+                    ->icon(fn (Etapa $record): string => $record->resultado_publicado ? 'heroicon-o-eye-slash' : 'heroicon-o-megaphone')
+                    ->color(fn (Etapa $record): string => $record->resultado_publicado ? 'gray' : 'success')
+                    ->requiresConfirmation()
+                    ->modalDescription('Publica (ou retira) a classificação desta etapa no portal público do candidato. Publique só após a divulgação oficial.')
+                    ->action(function (Etapa $record) {
+                        $novo = ! $record->resultado_publicado;
+                        $record->update([
+                            'resultado_publicado'    => $novo,
+                            'resultado_publicado_em' => $novo ? now() : null,
+                        ]);
+                        Notification::make()
+                            ->title($novo ? 'Classificação publicada no portal' : 'Classificação retirada do portal')
                             ->success()
                             ->send();
                     }),

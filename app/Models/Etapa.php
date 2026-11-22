@@ -14,15 +14,18 @@ class Etapa extends Model
     protected $fillable = [
         'tenant_id', 'concurso_id', 'cargo_id', 'ordem', 'tipo',
         'eliminatoria', 'classificatoria', 'nota_minima', 'peso', 'config',
+        'resultado_publicado', 'resultado_publicado_em',
     ];
 
     protected $casts = [
-        'tipo'            => TipoEtapa::class,
-        'eliminatoria'    => 'boolean',
-        'classificatoria' => 'boolean',
-        'nota_minima'     => 'decimal:2',
-        'peso'            => 'decimal:2',
-        'config'          => 'array',
+        'tipo'                   => TipoEtapa::class,
+        'eliminatoria'           => 'boolean',
+        'classificatoria'        => 'boolean',
+        'nota_minima'            => 'decimal:2',
+        'peso'                   => 'decimal:2',
+        'config'                 => 'array',
+        'resultado_publicado'    => 'boolean',
+        'resultado_publicado_em' => 'datetime',
     ];
 
     public function concurso(): BelongsTo { return $this->belongsTo(Concurso::class); }
