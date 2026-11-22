@@ -26,4 +26,19 @@ class Resultado extends Model implements Auditable
 
     public function inscricao(): BelongsTo { return $this->belongsTo(Inscricao::class); }
     public function etapa(): BelongsTo { return $this->belongsTo(Etapa::class); }
+
+    /** Rótulo da situação para exibição (o campo `situacao` é um código sem acento). */
+    public function situacaoLabel(): string
+    {
+        if ($this->eliminado) {
+            return 'Eliminado(a)';
+        }
+
+        return match ($this->situacao) {
+            'aprovado'      => 'Aprovado',
+            'classificavel' => 'Classificável',
+            'eliminado'     => 'Eliminado(a)',
+            default         => 'Classificado(a)',
+        };
+    }
 }

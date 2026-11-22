@@ -48,7 +48,7 @@
           <td>{{ $r->inscricao?->cargo?->nome ?? '—' }}</td>
           <td>{{ $r->inscricao?->modalidade?->label() ?? '—' }}</td>
           <td class="r">{{ $r->total !== null ? number_format((float)$r->total,2,',','.') : '—' }}</td>
-          <td>{{ $r->eliminado ? 'Eliminado(a)' : ($r->situacao ? ucfirst($r->situacao) : 'Classificado(a)') }}</td>
+          <td>{{ $r->situacaoLabel() }}</td>
         </tr>
       @empty
         <tr><td colspan="7" class="c">Sem resultados.</td></tr>

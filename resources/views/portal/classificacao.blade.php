@@ -73,7 +73,7 @@
                   @if($r->eliminado)
                     <span class="text-xs px-2 py-0.5 rounded bg-rose-100 text-rose-700">Eliminado(a)</span>
                   @elseif($r->situacao)
-                    <span class="text-xs px-2 py-0.5 rounded bg-emerald-100 text-emerald-700">{{ ucfirst($r->situacao) }}</span>
+                    <span class="text-xs px-2 py-0.5 rounded bg-emerald-100 text-emerald-700">{{ $r->situacaoLabel() }}</span>
                   @else
                     <span class="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600">Classificado(a)</span>
                   @endif
