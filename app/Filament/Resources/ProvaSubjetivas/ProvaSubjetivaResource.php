@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ProvaSubjetivas;
 
+use App\Filament\Concerns\ScopedToConcursoViaInscricao;
 use App\Filament\Resources\ProvaSubjetivas\Pages\CreateProvaSubjetiva;
 use App\Filament\Resources\ProvaSubjetivas\Pages\EditProvaSubjetiva;
 use App\Filament\Resources\ProvaSubjetivas\Pages\ListProvaSubjetivas;
@@ -16,11 +17,13 @@ use Filament\Tables\Table;
 
 class ProvaSubjetivaResource extends Resource
 {
-    protected static ?string $model = ProvaSubjetiva::class;
-    protected static ?string $modelLabel = 'Prova Subjetiva';
-    protected static ?string $pluralModelLabel = 'Provas Subjetivas';
+    use ScopedToConcursoViaInscricao;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?string $model = ProvaSubjetiva::class;
+    protected static ?string $modelLabel = 'Folha discursiva';
+    protected static ?string $pluralModelLabel = 'Discursivas (folhas)';
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
 
     protected static string | \UnitEnum | null $navigationGroup = 'Provas & Gabarito';
 
@@ -38,9 +41,7 @@ class ProvaSubjetivaResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array

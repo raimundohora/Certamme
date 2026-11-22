@@ -7,6 +7,7 @@ use App\Enums\TipoEtapa;
 use App\Services\ApuracaoService;
 use App\Services\TitulosService;
 use App\Services\ConvocacaoService;
+use App\Services\DiscursivaService;
 use App\Services\EnsalamentoService;
 use App\Services\ImportarNotasService;
 use App\Services\KitSalaService;
@@ -280,6 +281,44 @@ class EtapasTable
                             ->title($r['inscricoes'] > 0 ? 'Títulos pontuados' : 'Nada a pontuar')
                             ->body("Notas geradas: {$r['inscricoes']} (de {$r['titulos']} título(s), {$r['tipos']} tipo(s)). Agora rode Apurar resultado.")
                             ->color($r['inscricoes'] > 0 ? 'success' : 'warning')
+                            ->send();
+                    }),
+                Action::make('gerar_folhas_discursiva')
+                    ->label('Gerar folhas (discursiva)')
+                    ->icon('heroicon-o-document-plus')
+                    ->color('info')
+                    ->visible(fn (Etapa $record) => $record->tipo === TipoEtapa::REDACAO)
+                    ->requiresConfirmation()
+                    ->modalDescription('Cria uma folha anônima (com código de controle) para cada inscrição confirmada desta etapa que ainda não tenha.')
+                    ->action(function (Etapa $record) {
+                        $r = app(DiscursivaService::class)->gerarFolhas($record);
+                        Notification::make()
+                            ->title($r['criadas'] > 0 ? 'Folhas geradas' : 'Nada a gerar')
+                            ->body("Criadas: {$r['criadas']} · Já existiam: {$r['existentes']} · Total: {$r['total']}.")
+                            ->color($r['criadas'] > 0 ? 'success' : 'gray')
+                            ->send();
+                    }),
+                Action::make('consolidar_discursiva')
+                    ->label('Consolidar discursiva')
+                    ->icon('heroicon-o-scale')
+                    ->color('success')
+                    ->visible(fn (Etapa $record) => $record->tipo === TipoEtapa::REDACAO)
+                    ->modalHeading('Consolidar correções da discursiva')
+                    ->modalSubmitActionLabel('Consolidar')
+                    ->modalDescription('Nota final = média das 2 correções mais próximas. Acima da discrepância vira "divergente" (pede 3ª correção). Gera as notas; depois rode Apurar.')
+                    ->schema([
+                        TextInput::make('discrepancia_max')
+                            ->label('Discrepância máxima entre correções')
+                            ->numeric()->step('0.01')->minValue(0)->default(2)
+                            ->helperText('Diferença máxima tolerada entre as duas correções mais próximas.'),
+                    ])
+                    ->action(function (Etapa $record, array $data) {
+                        $r = app(DiscursivaService::class)->consolidar($record, (float) ($data['discrepancia_max'] ?? 2));
+                        Notification::make()
+                            ->title('Consolidação concluída')
+                            ->body("Corrigidas: {$r['corrigidas']} · Divergentes: {$r['divergentes']} · Pendentes: {$r['pendentes']} · Notas geradas: {$r['notas']} (de {$r['total']}).")
+                            ->color($r['divergentes'] > 0 ? 'warning' : 'success')
+                            ->persistent()
                             ->send();
                     }),
                 EditAction::make(),
