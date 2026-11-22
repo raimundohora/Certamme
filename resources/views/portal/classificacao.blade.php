@@ -24,13 +24,28 @@
       </div>
     @endif
 
+    <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+      <form method="GET" action="{{ route('portal.classificacao',$concurso) }}" class="flex gap-2 flex-1">
+        <input type="hidden" name="etapa" value="{{ $etapa->ordem }}">
+        <input name="q" value="{{ $q }}" placeholder="Buscar por nome ou nº de inscrição"
+               class="flex-1 border rounded px-3 py-2 text-sm">
+        <button class="bg-slate-800 text-white px-4 py-2 rounded text-sm font-semibold">Buscar</button>
+        @if($q !== '')
+          <a href="{{ route('portal.classificacao',$concurso) }}?etapa={{ $etapa->ordem }}" class="px-3 py-2 text-sm text-slate-500 hover:underline">Limpar</a>
+        @endif
+      </form>
+      <a href="{{ route('portal.classificacao.pdf',$concurso) }}?etapa={{ $etapa->ordem }}" target="_blank" rel="noopener"
+         class="inline-flex items-center justify-center gap-2 border border-emerald-600 text-emerald-700 hover:bg-emerald-50 px-4 py-2 rounded text-sm font-semibold">⬇️ Baixar PDF</a>
+    </div>
+
     <div class="bg-white rounded-lg shadow overflow-hidden">
       <div class="px-5 py-3 border-b bg-slate-50 text-sm text-slate-600">
         Etapa {{ $etapa->ordem }}@if($etapa->tipo) — {{ ucfirst($etapa->tipo->value) }}@endif
         @if($etapa->resultado_publicado_em)<span class="text-xs text-slate-400">· publicada em {{ $etapa->resultado_publicado_em->format('d/m/Y') }}</span>@endif
+        @if($q !== '')<span class="text-xs text-slate-400">· filtrando por "{{ $q }}"</span>@endif
       </div>
       @if($linhas->isEmpty())
-        <div class="p-5 text-slate-500 text-sm">Sem resultados para exibir nesta etapa.</div>
+        <div class="p-5 text-slate-500 text-sm">{{ $q !== '' ? 'Nenhum candidato encontrado para essa busca.' : 'Sem resultados para exibir nesta etapa.' }}</div>
       @else
         <div class="overflow-x-auto">
         <table class="w-full text-sm">

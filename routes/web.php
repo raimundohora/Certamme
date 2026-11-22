@@ -41,6 +41,7 @@ Route::middleware('portal.tenant')->group(function () {
 
     Route::get('/concursos/{concurso}', [ConcursoController::class, 'show'])->name('portal.concurso');
     Route::get('/concursos/{concurso}/classificacao', [ClassificacaoController::class, 'concurso'])->name('portal.classificacao');
+    Route::get('/concursos/{concurso}/classificacao/pdf', [ClassificacaoController::class, 'pdf'])->name('portal.classificacao.pdf');
 
     // Autenticação pública de documentos (sem login): /autenticar e /autenticar/{codigo}
     Route::get('/autenticar/{codigo?}', [CertificadoController::class, 'verificar'])->name('portal.autenticar');
