@@ -41,6 +41,9 @@ Route::middleware('portal.tenant')->group(function () {
 
 // Kit de sala (admin autenticado)
 Route::middleware(['web', 'auth'])->get('/kit/{etapa}/lista-presenca', [KitSalaController::class, 'listaPresenca'])->name('kit.presenca');
+Route::middleware(['web', 'auth'])->get('/kit/{etapa}/mapa-sala', [KitSalaController::class, 'mapaSala'])->name('kit.mapa');
+Route::middleware(['web', 'auth'])->get('/kit/{etapa}/ata-sala', [KitSalaController::class, 'ata'])->name('kit.ata');
+Route::middleware(['web', 'auth'])->get('/kit/{etapa}/cartoes-resposta', [KitSalaController::class, 'cartoes'])->name('kit.cartoes');
 
 // Relatorios/exportacoes (admin autenticado)
 Route::middleware(['web', 'auth'])->group(function () {

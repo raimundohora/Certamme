@@ -201,6 +201,66 @@ class EtapasTable
                             'lista-presenca-etapa-' . $record->ordem . '.pdf',
                         );
                     }),
+                Action::make('mapa_sala')
+                    ->label('Mapa de sala (PDF)')
+                    ->icon('heroicon-o-map')
+                    ->color('gray')
+                    ->action(function (Etapa $record) {
+                        $dados = app(KitSalaService::class)->dadosMapaSala($record);
+                        if (count($dados['salas']) === 0) {
+                            Notification::make()->title('Sem ensalamento')->body('Rode o ensalamento antes de gerar o mapa de sala.')->warning()->send();
+                            return null;
+                        }
+                        $pdf = Pdf::loadView('pdf.mapa-sala', $dados)->setPaper('a4', 'landscape');
+                        return response()->streamDownload(fn () => print($pdf->output()), 'mapa-sala-etapa-' . $record->ordem . '.pdf');
+                    }),
+                Action::make('ata_sala')
+                    ->label('Ata de sala (PDF)')
+                    ->icon('heroicon-o-clipboard-document-check')
+                    ->color('gray')
+                    ->action(function (Etapa $record) {
+                        $dados = app(KitSalaService::class)->dadosAta($record);
+                        if (count($dados['salas']) === 0) {
+                            Notification::make()->title('Sem ensalamento')->body('Rode o ensalamento antes de gerar as atas.')->warning()->send();
+                            return null;
+                        }
+                        $pdf = Pdf::loadView('pdf.ata-sala', $dados)->setPaper('a4');
+                        return response()->streamDownload(fn () => print($pdf->output()), 'ata-sala-etapa-' . $record->ordem . '.pdf');
+                    }),
+                Action::make('cartoes_resposta')
+                    ->label('Cartões-resposta (PDF)')
+                    ->icon('heroicon-o-rectangle-group')
+                    ->color('gray')
+                    ->modalHeading('Gerar cartões-resposta')
+                    ->modalSubmitActionLabel('Gerar PDF')
+                    ->modalDescription('Um cartão por candidato alocado, na ordem sala → carteira.')
+                    ->schema([
+                        TextInput::make('questoes')
+                            ->label('Nº de questões')
+                            ->numeric()
+                            ->minValue(1)
+                            ->helperText('Deixe em branco para usar a qtd. de questões da prova cadastrada na etapa.'),
+                        Select::make('alternativas')
+                            ->label('Alternativas por questão')
+                            ->options([4 => '4 (A–D)', 5 => '5 (A–E)'])
+                            ->default(5)
+                            ->required(),
+                    ])
+                    ->action(function (Etapa $record, array $data) {
+                        $qtd = isset($data['questoes']) && $data['questoes'] !== null && $data['questoes'] !== ''
+                            ? (int) $data['questoes'] : null;
+                        $dados = app(KitSalaService::class)->dadosCartoes($record, $qtd, (int) ($data['alternativas'] ?? 5));
+                        if (count($dados['candidatos']) === 0) {
+                            Notification::make()->title('Sem ensalamento')->body('Rode o ensalamento antes de gerar os cartões.')->warning()->send();
+                            return null;
+                        }
+                        if ($dados['qtdQuestoes'] === 0) {
+                            Notification::make()->title('Nº de questões não definido')->body('Informe a quantidade de questões ou cadastre a prova (qtd_questoes).')->warning()->send();
+                            return null;
+                        }
+                        $pdf = Pdf::loadView('pdf.cartoes-resposta', $dados)->setPaper('a4');
+                        return response()->streamDownload(fn () => print($pdf->output()), 'cartoes-resposta-etapa-' . $record->ordem . '.pdf');
+                    }),
                 EditAction::make(),
             ])
             ->toolbarActions([
