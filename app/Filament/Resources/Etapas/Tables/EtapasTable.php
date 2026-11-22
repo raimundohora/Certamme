@@ -3,7 +3,9 @@
 namespace App\Filament\Resources\Etapas\Tables;
 
 use App\Models\Etapa;
+use App\Enums\TipoEtapa;
 use App\Services\ApuracaoService;
+use App\Services\TitulosService;
 use App\Services\ConvocacaoService;
 use App\Services\EnsalamentoService;
 use App\Services\ImportarNotasService;
@@ -260,6 +262,25 @@ class EtapasTable
                         }
                         $pdf = Pdf::loadView('pdf.cartoes-resposta', $dados)->setPaper('a4');
                         return response()->streamDownload(fn () => print($pdf->output()), 'cartoes-resposta-etapa-' . $record->ordem . '.pdf');
+                    }),
+                Action::make('pontuar_titulos')
+                    ->label('Pontuar títulos')
+                    ->icon('heroicon-o-academic-cap')
+                    ->color('success')
+                    ->visible(fn (Etapa $record) => $record->tipo === TipoEtapa::TITULOS)
+                    ->requiresConfirmation()
+                    ->modalDescription('Converte os títulos avaliados em uma nota por candidato (respeitando o teto de cada tipo). Depois rode "Apurar resultado" para classificar.')
+                    ->action(function (Etapa $record) {
+                        $r = app(TitulosService::class)->gerarNotas($record);
+                        if (! empty($r['sem_tipos'])) {
+                            Notification::make()->title('Sem tipos de título')->body('Cadastre os tipos de título desta etapa antes de pontuar.')->warning()->send();
+                            return;
+                        }
+                        Notification::make()
+                            ->title($r['inscricoes'] > 0 ? 'Títulos pontuados' : 'Nada a pontuar')
+                            ->body("Notas geradas: {$r['inscricoes']} (de {$r['titulos']} título(s), {$r['tipos']} tipo(s)). Agora rode Apurar resultado.")
+                            ->color($r['inscricoes'] > 0 ? 'success' : 'warning')
+                            ->send();
                     }),
                 EditAction::make(),
             ])
