@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Tenant extends Model
 {
-    protected $fillable = ['nome', 'slug', 'ativo'];
+    protected $fillable = ['nome', 'slug', 'dominio', 'ativo'];
     protected $casts = ['ativo' => 'boolean'];
 
     protected static ?Tenant $current = null;

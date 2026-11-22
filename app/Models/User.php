@@ -13,7 +13,7 @@ class User extends Authenticatable implements FilamentUser
 {
     use HasFactory, Notifiable, HasRoles;
 
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = ['tenant_id', 'name', 'email', 'password'];
     protected $hidden = ['password', 'remember_token'];
 
     protected function casts(): array
@@ -24,9 +24,21 @@ class User extends Authenticatable implements FilamentUser
         ];
     }
 
+    /** Super-admin da plataforma: sem organizadora, opera qualquer subdomínio. */
+    public function isPlataforma(): bool
+    {
+        return $this->tenant_id === null;
+    }
+
     public function canAccessPanel(Panel $panel): bool
     {
-        // Qualquer colaborador com conta acessa o painel; o Shield controla o que ele VÊ.
-        return true;
+        // Super-admin da plataforma acessa o admin de qualquer organizadora.
+        if ($this->isPlataforma()) {
+            return true;
+        }
+
+        // Admin de organizadora só acessa o admin da PRÓPRIA organizadora
+        // (o subdomínio em uso). Impede sessão de uma organizadora valer em outra.
+        return Tenant::current() !== null && $this->tenant_id === Tenant::current()->id;
     }
 }

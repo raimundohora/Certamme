@@ -7,8 +7,10 @@ use App\Filament\Resources\Users\Pages\EditUser;
 use App\Filament\Resources\Users\Pages\ListUsers;
 use App\Filament\Resources\Users\Schemas\UserForm;
 use App\Filament\Resources\Users\Tables\UsersTable;
+use App\Models\Tenant;
 use App\Models\User;
 use BackedEnum;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -26,6 +28,18 @@ class UserResource extends Resource
     protected static string | \UnitEnum | null $navigationGroup = 'Sistema';
 
     protected static ?int $navigationSort = 10;
+
+    /** Cada organizadora enxerga só os próprios colaboradores (User não tem escopo global). */
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        if ($tenant = Tenant::current()) {
+            $query->where('users.tenant_id', $tenant->id);
+        }
+
+        return $query;
+    }
 
     public static function form(Schema $schema): Schema
     {

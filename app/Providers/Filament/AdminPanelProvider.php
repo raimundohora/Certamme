@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\SetPortalTenant;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -67,6 +68,9 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                // Resolve a organizadora pelo subdomínio/domínio ANTES do Authenticate,
+                // para o canAccessPanel e o escopo de dados valerem no admin.
+                SetPortalTenant::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
