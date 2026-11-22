@@ -38,7 +38,11 @@ class User extends Authenticatable implements FilamentUser
         }
 
         // Admin de organizadora só acessa o admin da PRÓPRIA organizadora
-        // (o subdomínio em uso). Impede sessão de uma organizadora valer em outra.
-        return Tenant::current() !== null && $this->tenant_id === Tenant::current()->id;
+        // (o subdomínio/host em uso). Impede sessão de uma organizadora valer em outra.
+        // Resolve pelo host diretamente: o Authenticate do Filament pode rodar antes do
+        // SetPortalTenant (prioridade de middleware), deixando Tenant::current() null.
+        $atual = Tenant::current() ?? Tenant::resolveByHost(request()->getHost());
+
+        return $atual !== null && $this->tenant_id === $atual->id;
     }
 }

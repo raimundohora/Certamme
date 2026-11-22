@@ -54,6 +54,16 @@ class TenantResource extends Resource
         return static::ehPlataforma();
     }
 
+    /**
+     * No Filament v4 a página de criação chama authorizeCreate() (via policy),
+     * não canCreate(). Sem TenantPolicy, o Filament libera por padrão — então
+     * fechamos aqui o acesso por URL à criação para quem não é plataforma.
+     */
+    public static function authorizeCreate(): void
+    {
+        abort_unless(static::ehPlataforma(), 403);
+    }
+
     public static function canDelete($record): bool
     {
         return static::ehPlataforma();

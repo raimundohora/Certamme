@@ -73,8 +73,11 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-                SetPortalTenant::class,
             ])
+            // Persistente: precisa rodar também nas requisições Livewire (ex.: submit do
+            // login), senão Tenant::current() fica null e canAccessPanel barra admins de
+            // organizadora. O super-admin (isPlataforma) não dependia disso.
+            ->middleware([SetPortalTenant::class], isPersistent: true)
             ->authMiddleware([
                 Authenticate::class,
             ]);
