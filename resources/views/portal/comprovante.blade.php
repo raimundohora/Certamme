@@ -56,6 +56,23 @@
     @endif
   </div>
 
+  {{-- Documentos oficiais --}}
+  @if(!empty($certificados))
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="font-semibold mb-1">Documentos oficiais</h2>
+    <p class="text-xs text-slate-500 mb-3">Baixe em PDF. Cada documento traz um código de autenticação conferível publicamente.</p>
+    <div class="space-y-2">
+      @foreach($certificados as $tipo)
+        <a href="{{ route('portal.certificado', [$inscricao, $tipo->value]) }}" target="_blank" rel="noopener"
+           class="flex items-center justify-between border rounded px-4 py-3 hover:bg-slate-50">
+          <span class="text-sm font-medium text-slate-700">📄 {{ $tipo->label() }}</span>
+          <span class="text-xs text-emerald-700 font-semibold">Baixar PDF →</span>
+        </a>
+      @endforeach
+    </div>
+  </div>
+  @endif
+
   {{-- Isencao de taxa --}}
   <div class="bg-white rounded-lg shadow p-6">
     <h2 class="font-semibold mb-3">Isenção de taxa</h2>

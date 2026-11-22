@@ -10,6 +10,7 @@ use App\Models\Cargo;
 use App\Models\Concurso;
 use App\Models\Inscricao;
 use App\Models\Pagamento;
+use App\Services\CertificadoService;
 use App\Services\PagamentoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -120,6 +121,8 @@ class InscricaoController extends Controller
                 report($e);
             }
         }
-        return view('portal.comprovante', compact('inscricao', 'pagamento'));
+        $certificados = app(CertificadoService::class)->disponiveis($inscricao);
+
+        return view('portal.comprovante', compact('inscricao', 'pagamento', 'certificados'));
     }
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\Portal\IsencaoController;
 use App\Http\Controllers\Portal\RecursoController;
 use App\Http\Controllers\Portal\PainelController;
 use App\Http\Controllers\Portal\ResultadoController;
+use App\Http\Controllers\Portal\CertificadoController;
 use App\Http\Controllers\Admin\KitSalaController;
 use App\Http\Controllers\Admin\RelatorioController;
 use Illuminate\Support\Facades\Route;
@@ -31,12 +32,16 @@ Route::middleware('portal.tenant')->group(function () {
         Route::get('/concursos/{concurso}/inscrever', [InscricaoController::class, 'create'])->name('portal.inscrever');
         Route::post('/concursos/{concurso}/inscrever', [InscricaoController::class, 'store']);
         Route::get('/inscricao/{inscricao}/comprovante', [InscricaoController::class, 'comprovante'])->name('portal.comprovante');
+        Route::get('/inscricao/{inscricao}/certificado/{tipo}', [CertificadoController::class, 'emitir'])->name('portal.certificado');
         Route::post('/inscricao/{inscricao}/documentos', [DocumentoController::class, 'store'])->name('portal.documento.store');
         Route::post('/inscricao/{inscricao}/isencao', [IsencaoController::class, 'store'])->name('portal.isencao.store');
         Route::post('/inscricao/{inscricao}/recurso', [RecursoController::class, 'store'])->name('portal.recurso.store');
     });
 
     Route::get('/concursos/{concurso}', [ConcursoController::class, 'show'])->name('portal.concurso');
+
+    // Autenticação pública de documentos (sem login): /autenticar e /autenticar/{codigo}
+    Route::get('/autenticar/{codigo?}', [CertificadoController::class, 'verificar'])->name('portal.autenticar');
 });
 
 // Kit de sala (admin autenticado)
