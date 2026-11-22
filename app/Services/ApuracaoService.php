@@ -15,8 +15,9 @@ use App\Models\Resultado;
  * (por cargo + modalidade): os primeiros N de cada modalidade ficam "aprovado", o resto
  * "classificavel". Idempotente (updateOrCreate).
  *
- * Observacao: o corte considera a cota declarada pelo candidato (sem alternancia
- * ampla x cota entre as listas) — refinamento previsto para fase posterior.
+ * A modalidade usada na classificacao por cota e no corte e a EFETIVA (Inscricao::
+ * modalidadeEfetiva): se a cota foi indeferida na heteroidentificacao, o candidato
+ * concorre na ampla.
  */
 class ApuracaoService
 {
@@ -69,6 +70,7 @@ class ApuracaoService
         $ranking = Resultado::with([
                 'inscricao:id,numero_inscricao,modalidade,cargo_id,candidato_id',
                 'inscricao.candidato:id,data_nascimento',
+                'inscricao.heteroidentificacao:id,inscricao_id,status',
             ])
             ->where('etapa_id', $etapa->id)
             ->where('eliminado', false)
@@ -104,7 +106,7 @@ class ApuracaoService
             $posGeral++;
             $r->classificacao = $posGeral;
 
-            $mod = $r->inscricao?->modalidade?->value ?? 'ampla';
+            $mod = $r->inscricao?->modalidadeEfetiva() ?? 'ampla';
             $posCota[$mod] = ($posCota[$mod] ?? 0) + 1;
             $r->classificacao_cota = $posCota[$mod];
 

@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Models\Convocacao;
+use App\Models\Heteroidentificacao;
 use App\Models\Isencao;
 use App\Models\Recurso;
 use App\Observers\ConvocacaoObserver;
+use App\Observers\HeteroidentificacaoObserver;
 use App\Observers\IsencaoObserver;
 use App\Observers\RecursoObserver;
 use Illuminate\Support\ServiceProvider;
@@ -22,5 +24,6 @@ class AppServiceProvider extends ServiceProvider
         Isencao::observe(IsencaoObserver::class);
         Recurso::observe(RecursoObserver::class);
         Convocacao::observe(ConvocacaoObserver::class);
+        Heteroidentificacao::observe(HeteroidentificacaoObserver::class);
     }
 }
